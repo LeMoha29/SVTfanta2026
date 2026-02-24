@@ -1,895 +1,719 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>SVT Official FantaSanremo</title>
-<meta name="theme-color" content="#110018"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SVT Official FantaSanremo — Glitter Pop</title>
+  <meta name="theme-color" content="#120026" />
+  <style>
+    :root{
+      --bgA:#0b0016; --bgB:#13002a; --line: rgba(255,255,255,.16);
+      --ink: rgba(255,255,255,.93); --muted: rgba(255,255,255,.65);
+      --shadow: 0 18px 60px rgba(0,0,0,.35); --r: 26px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background:
+        radial-gradient(1200px 600px at 20% 10%, rgba(255,79,216,.25), transparent 60%),
+        radial-gradient(1000px 600px at 80% 20%, rgba(34,211,238,.18), transparent 60%),
+        radial-gradient(900px 700px at 50% 90%, rgba(124,58,237,.20), transparent 60%),
+        linear-gradient(180deg, var(--bgA), var(--bgB));
+      overflow-x:hidden;
+    }
+    .sparkle{position:fixed; inset:0; pointer-events:none; opacity:.35;
+      background-image:
+        radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.9) 40%, transparent 45%),
+        radial-gradient(1.5px 1.5px at 70% 18%, rgba(255,255,255,.8) 40%, transparent 45%),
+        radial-gradient(1.5px 1.5px at 35% 75%, rgba(255,255,255,.7) 40%, transparent 45%),
+        radial-gradient(2px 2px at 85% 65%, rgba(255,255,255,.75) 40%, transparent 45%),
+        radial-gradient(1.2px 1.2px at 55% 45%, rgba(255,255,255,.6) 40%, transparent 45%);
+      filter: blur(.2px); animation: tw 6s ease-in-out infinite alternate;
+    }
+    @keyframes tw{ from{opacity:.25} to{opacity:.45} }
+    .wrap{max-width:1150px; margin:0 auto; padding:26px 16px 70px;}
+    .top{display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; margin-bottom:16px;}
+    .brand{display:flex; flex-direction:column; gap:10px;}
+    .badge{
+      display:inline-flex; align-items:center; gap:10px; padding:8px 12px; border-radius:999px;
+      border:1px solid var(--line);
+      background: linear-gradient(135deg, rgba(255,79,216,.18), rgba(34,211,238,.12));
+      box-shadow: 0 10px 30px rgba(255,79,216,.08);
+      font-size:12px; font-weight:900; letter-spacing:.03em;
+    }
+    .h1{
+      font-size:34px; font-weight:950; letter-spacing:-.03em; margin:0;
+      background: linear-gradient(90deg, #fff, rgba(255,79,216,.95), rgba(34,211,238,.95), #fff);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+      text-shadow: 0 0 30px rgba(255,79,216,.08);
+    }
+    .sub{color: var(--muted); font-size:13px; margin-top:4px; max-width: 85ch;}
+    .kpi{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px;
+      border:1px solid var(--line); background: rgba(255,255,255,.06);
+      font-size:12px; font-weight:850; color: rgba(255,255,255,.82);
+    }
 
-<style>
-  :root{
-    --bg0:#07000f;
-    --bg1:#120022;
-    --bg2:#1d0038;
-    --glass: rgba(255,255,255,.08);
-    --glass2: rgba(255,255,255,.06);
-    --line: rgba(255,255,255,.16);
-    --line2: rgba(255,255,255,.10);
-    --text: rgba(255,255,255,.95);
-    --muted: rgba(255,255,255,.70);
+    .tabs{display:flex; gap:10px; flex-wrap:wrap; margin: 16px 0}
+    .tab{
+      padding:10px 14px; border-radius:18px; border:1px solid var(--line);
+      background: rgba(255,255,255,.06); font-weight:950; cursor:pointer;
+    }
+    .tab.active{
+      background: linear-gradient(135deg, rgba(34,211,238,.22), rgba(255,79,216,.22));
+      border-color: rgba(255,255,255,.25);
+    }
 
-    --pink:#ff43d1;
-    --cyan:#23d5ff;
-    --violet:#7c3aed;
-    --gold:#ffd36e;
-    --silver:#cfd6e7;
-    --bronze:#ffb08a;
+    .grid{display:grid; gap:16px}
+    @media(min-width:980px){ .cols2{grid-template-columns: 1.15fr .85fr} }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+      border:1px solid var(--line); border-radius: var(--r); padding:18px;
+      box-shadow: var(--shadow); backdrop-filter: blur(10px);
+    }
+    .title{display:flex; align-items:center; gap:10px; margin-bottom:12px}
+    .ibox{
+      width:36px; height:36px; border-radius:16px; display:flex; align-items:center; justify-content:center;
+      font-weight:950;
+      background: linear-gradient(135deg, rgba(255,79,216,.35), rgba(34,211,238,.28));
+      border:1px solid rgba(255,255,255,.22);
+    }
+    .t1{font-size:18px; font-weight:950; letter-spacing:-.01em}
+    .t2{font-size:13px; color:var(--muted); margin-top:2px}
 
-    --r: 26px;
-    --shadow: 0 22px 70px rgba(0,0,0,.45);
-    --shadow2: 0 10px 30px rgba(0,0,0,.32);
-  }
+    .rankRow{
+      display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px;
+      border:1px solid rgba(255,255,255,.14); background: rgba(0,0,0,.14);
+      border-radius: 18px; position:relative; overflow:hidden;
+      transition: transform .2s ease;
+    }
+    .rankRow:hover{ transform: translateY(-1px); }
+    .teamLeft{display:flex; align-items:center; gap:10px}
+    .teamIcon{
+      width:44px; height:44px; border-radius:18px; display:flex; align-items:center; justify-content:center;
+      background: rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); font-size:20px;
+    }
+    .small{font-size:12px; color:var(--muted)}
+    .big{font-size:20px; font-weight:950}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
 
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;
-    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-    color: var(--text);
-    background:
-      radial-gradient(1200px 700px at 18% 10%, rgba(255,67,209,.28), transparent 60%),
-      radial-gradient(1100px 650px at 85% 18%, rgba(35,213,255,.20), transparent 60%),
-      radial-gradient(900px 700px at 50% 85%, rgba(124,58,237,.18), transparent 60%),
-      linear-gradient(180deg, var(--bg0), var(--bg1) 40%, var(--bg2));
-    overflow-x:hidden;
-  }
+    /* Podio */
+    .podium-1,.podium-2,.podium-3{position:relative}
+    .podium-1::before,.podium-2::before,.podium-3::before{
+      content:""; position:absolute; inset:-2px; border-radius: 20px; opacity:.45; pointer-events:none;
+    }
+    .podium-1{
+      border-color: rgba(255, 211, 110, .35);
+      background: linear-gradient(180deg, rgba(255,211,110,.18), rgba(0,0,0,.12));
+      box-shadow: 0 0 0 1px rgba(255,211,110,.12), 0 16px 40px rgba(255,211,110,.10);
+      animation: glow1 1.8s ease-in-out infinite alternate;
+    }
+    .podium-1::before{
+      background: radial-gradient(600px 200px at 20% 20%, rgba(255,211,110,.35), transparent 60%),
+                  radial-gradient(500px 160px at 80% 30%, rgba(255,79,216,.22), transparent 60%);
+    }
+    .podium-2{
+      border-color: rgba(200, 210, 230, .28);
+      background: linear-gradient(180deg, rgba(200,210,230,.14), rgba(0,0,0,.12));
+      animation: glow2 2.2s ease-in-out infinite alternate;
+    }
+    .podium-2::before{
+      background: radial-gradient(600px 200px at 30% 20%, rgba(200,210,230,.25), transparent 60%),
+                  radial-gradient(500px 160px at 70% 30%, rgba(34,211,238,.16), transparent 60%);
+    }
+    .podium-3{
+      border-color: rgba(255, 167, 120, .25);
+      background: linear-gradient(180deg, rgba(255,167,120,.14), rgba(0,0,0,.12));
+      animation: glow3 2.6s ease-in-out infinite alternate;
+    }
+    .podium-3::before{
+      background: radial-gradient(600px 200px at 30% 20%, rgba(255,167,120,.22), transparent 60%),
+                  radial-gradient(500px 160px at 70% 30%, rgba(124,58,237,.14), transparent 60%);
+    }
+    @keyframes glow1{ from{transform:translateY(0)} to{transform:translateY(-1px)} }
+    @keyframes glow2{ from{transform:translateY(0)} to{transform:translateY(-1px)} }
+    @keyframes glow3{ from{transform:translateY(0)} to{transform:translateY(-1px)} }
+    .bump{ animation: bump .38s ease-out; }
+    @keyframes bump{ 0%{transform:translateY(8px);opacity:.65} 100%{transform:translateY(0);opacity:1} }
 
-  /* animated aurora */
-  .aurora{
-    position:fixed; inset:-30%;
-    background:
-      radial-gradient(closest-side at 20% 30%, rgba(255,67,209,.35), transparent 60%),
-      radial-gradient(closest-side at 80% 20%, rgba(35,213,255,.25), transparent 60%),
-      radial-gradient(closest-side at 60% 80%, rgba(124,58,237,.22), transparent 65%),
-      radial-gradient(closest-side at 40% 70%, rgba(255,211,110,.12), transparent 65%);
-    filter: blur(40px);
-    opacity:.85;
-    animation: drift 10s ease-in-out infinite alternate;
-    pointer-events:none;
-    transform: translate3d(0,0,0);
-  }
-  @keyframes drift{
-    from{ transform: translate(-2%, -1%) rotate(-2deg) scale(1.02); }
-    to{ transform: translate(2%, 1%) rotate(2deg) scale(1.06); }
-  }
+    .medal{
+      font-weight:950; font-size:12px; padding:6px 10px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.06);
+      display:inline-flex; align-items:center; gap:8px; margin-left:8px; white-space:nowrap;
+    }
 
-  /* glitter stars */
-  .sparkles{
-    position:fixed; inset:0; pointer-events:none;
-    background-image:
-      radial-gradient(1.2px 1.2px at 10% 25%, rgba(255,255,255,.95) 40%, transparent 46%),
-      radial-gradient(1.6px 1.6px at 30% 70%, rgba(255,255,255,.85) 40%, transparent 46%),
-      radial-gradient(1.2px 1.2px at 55% 40%, rgba(255,255,255,.75) 40%, transparent 46%),
-      radial-gradient(1.8px 1.8px at 85% 35%, rgba(255,255,255,.80) 40%, transparent 46%),
-      radial-gradient(1.1px 1.1px at 75% 82%, rgba(255,255,255,.72) 40%, transparent 46%),
-      radial-gradient(2px 2px at 45% 15%, rgba(255,255,255,.65) 40%, transparent 46%);
-    opacity:.35;
-    animation: twinkle 3.5s ease-in-out infinite alternate;
-    filter: blur(.2px);
-  }
-  @keyframes twinkle{ from{opacity:.22} to{opacity:.45} }
+    /* HOT badge */
+    .hotBadge{
+      margin-left:8px; font-size:11px; font-weight:950; padding:6px 10px; border-radius:999px;
+      background:#ff1a1a; color:white; animation: hotBlink 1s infinite alternate;
+      box-shadow:0 0 12px rgba(255,0,0,.7); border:1px solid rgba(255,255,255,.18);
+    }
+    @keyframes hotBlink{ from{opacity:1; transform:scale(1)} to{opacity:.6; transform:scale(1.05)} }
 
-  /* subtle grain */
-  .grain{
-    position:fixed; inset:-50%;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
-    opacity:.10;
-    mix-blend-mode: overlay;
-    pointer-events:none;
-    animation: grainMove 6s steps(6) infinite;
-  }
-  @keyframes grainMove{
-    0%{ transform: translate(0,0) }
-    20%{ transform: translate(-2%, 1%) }
-    40%{ transform: translate(1%, -2%) }
-    60%{ transform: translate(3%, 2%) }
-    80%{ transform: translate(-1%, -3%) }
-    100%{ transform: translate(0,0) }
-  }
+    .nightBtns{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+    .nightBtn{
+      padding:8px 10px; border-radius:16px; border:1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.14); color: var(--ink); font-weight:900; cursor:pointer;
+    }
+    .nightBtn.active{
+      background: linear-gradient(135deg, rgba(255,79,216,.22), rgba(34,211,238,.18));
+      border-color: rgba(255,255,255,.25);
+    }
 
-  .wrap{max-width:1200px;margin:0 auto;padding:28px 16px 70px; position:relative; z-index:2;}
-  .header{
-    display:flex; align-items:flex-end; justify-content:space-between; gap:14px; flex-wrap:wrap;
-    margin-bottom:14px;
-  }
-  h1{
-    margin:0;
-    font-size:46px;
-    font-weight:950;
-    letter-spacing:-.03em;
-    line-height:1.05;
-    background: linear-gradient(90deg, #fff, rgba(255,67,209,.98), rgba(35,213,255,.98), rgba(255,255,255,.95));
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
-    text-shadow: 0 0 35px rgba(255,67,209,.12);
-  }
-  .subtitleRow{
-    display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:10px;
-  }
-  .chip{
-    display:inline-flex; align-items:center; gap:8px;
-    padding:8px 12px;
-    border-radius:999px;
-    border:1px solid var(--line2);
-    background: rgba(255,255,255,.06);
-    font-weight:900;
-    font-size:12px;
-    box-shadow: 0 10px 26px rgba(0,0,0,.22);
-  }
+    .mutebox{
+      padding:12px; border-radius:18px; border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.14); color: var(--muted); font-size:13px; line-height:1.35;
+    }
+    .footer{margin-top:18px; text-align:center; font-size:12px; color: rgba(255,255,255,.55)}
 
-  .tabs{display:flex; gap:10px; flex-wrap:wrap; margin:16px 0 16px;}
-  .tab{
-    padding:10px 14px;
-    border-radius:18px;
-    border:1px solid var(--line);
-    background: rgba(255,255,255,.06);
-    color: var(--text);
-    font-weight:950;
-    cursor:pointer;
-    transition: transform .12s ease, background .18s ease, border-color .18s ease;
-    user-select:none;
-  }
-  .tab:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.26) }
-  .tab.active{
-    background: linear-gradient(135deg, rgba(255,67,209,.22), rgba(35,213,255,.18));
-    border-color: rgba(255,255,255,.28);
-  }
-
-  .grid{display:grid; gap:16px}
-  @media(min-width:980px){ .cols2{ grid-template-columns: 1.2fr .8fr; } }
-
-  .card{
-    border-radius: var(--r);
-    border:1px solid var(--line);
-    background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
-    box-shadow: var(--shadow);
-    backdrop-filter: blur(10px);
-    padding:18px;
-    position:relative;
-    overflow:hidden;
-  }
-  .card::before{
-    content:"";
-    position:absolute; inset:-2px;
-    background:
-      radial-gradient(700px 280px at 18% 20%, rgba(255,67,209,.18), transparent 60%),
-      radial-gradient(700px 280px at 85% 25%, rgba(35,213,255,.14), transparent 60%),
-      radial-gradient(700px 360px at 55% 95%, rgba(124,58,237,.12), transparent 65%);
-    opacity:.55;
-    pointer-events:none;
-  }
-  .card::after{
-    content:"";
-    position:absolute; inset:0;
-    background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,.10) 35%, transparent 70%);
-    transform: translateX(-120%);
-    animation: sheen 6.5s ease-in-out infinite;
-    opacity:.35;
-    pointer-events:none;
-  }
-  @keyframes sheen{
-    0%,55%{ transform: translateX(-120%); }
-    70%{ transform: translateX(120%); }
-    100%{ transform: translateX(120%); }
-  }
-
-  .rank{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    padding:14px 14px;
-    border-radius:20px;
-    border:1px solid rgba(255,255,255,.14);
-    background: rgba(0,0,0,.16);
-    box-shadow: var(--shadow2);
-    position:relative;
-    overflow:hidden;
-    transform: translate3d(0,0,0);
-    transition: transform .15s ease, border-color .18s ease, background .18s ease;
-  }
-  .rank:hover{
-    transform: translateY(-2px);
-    border-color: rgba(255,255,255,.22);
-    background: rgba(0,0,0,.20);
-  }
-
-  .left{display:flex; align-items:center; gap:12px; min-width:0;}
-  .badgeIcon{
-    width:46px; height:46px;
-    border-radius:18px;
-    border:1px solid rgba(255,255,255,.16);
-    background: rgba(255,255,255,.08);
-    display:flex; align-items:center; justify-content:center;
-    font-size:20px;
-    flex:0 0 auto;
-  }
-  .nameLine{
-    display:flex; align-items:center; gap:10px;
-    font-weight:950;
-    letter-spacing:-.01em;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    max-width: 72vw;
-  }
-  .pos{
-    font-weight:950;
-    opacity:.95;
-    width:40px;
-    flex:0 0 auto;
-  }
-  .score{
-    font-weight:950;
-    font-size:22px;
-    letter-spacing:-.02em;
-    flex:0 0 auto;
-  }
-
-  /* medals */
-  .medal{
-    font-size:12px;
-    padding:6px 10px;
-    border-radius:999px;
-    border:1px solid rgba(255,255,255,.18);
-    background: rgba(255,255,255,.06);
-    font-weight:950;
-    display:inline-flex;
-    gap:8px;
-    align-items:center;
-    white-space:nowrap;
-  }
-
-  /* podium effects */
-  .pod1,.pod2,.pod3{ position:relative; }
-  .pod1{
-    border-color: rgba(255,211,110,.34);
-    box-shadow: 0 0 0 1px rgba(255,211,110,.12), 0 18px 55px rgba(255,211,110,.11), var(--shadow2);
-    animation: float1 1.8s ease-in-out infinite alternate;
-  }
-  .pod2{
-    border-color: rgba(207,214,231,.26);
-    box-shadow: 0 0 0 1px rgba(207,214,231,.10), 0 18px 55px rgba(207,214,231,.08), var(--shadow2);
-    animation: float2 2.2s ease-in-out infinite alternate;
-  }
-  .pod3{
-    border-color: rgba(255,176,138,.22);
-    box-shadow: 0 0 0 1px rgba(255,176,138,.10), 0 18px 55px rgba(255,176,138,.07), var(--shadow2);
-    animation: float3 2.6s ease-in-out infinite alternate;
-  }
-  .pod1::before,.pod2::before,.pod3::before{
-    content:"";
-    position:absolute; inset:-2px;
-    border-radius:22px;
-    opacity:.45;
-    pointer-events:none;
-    filter: blur(.2px);
-  }
-  .pod1::before{
-    background:
-      radial-gradient(600px 180px at 15% 20%, rgba(255,211,110,.35), transparent 65%),
-      radial-gradient(540px 160px at 85% 35%, rgba(255,67,209,.20), transparent 65%);
-  }
-  .pod2::before{
-    background:
-      radial-gradient(600px 180px at 20% 20%, rgba(207,214,231,.28), transparent 65%),
-      radial-gradient(540px 160px at 80% 35%, rgba(35,213,255,.16), transparent 65%);
-  }
-  .pod3::before{
-    background:
-      radial-gradient(600px 180px at 20% 20%, rgba(255,176,138,.22), transparent 65%),
-      radial-gradient(540px 160px at 80% 35%, rgba(124,58,237,.14), transparent 65%);
-  }
-  @keyframes float1{ from{transform:translateY(0)} to{transform:translateY(-1.5px)} }
-  @keyframes float2{ from{transform:translateY(0)} to{transform:translateY(-1.2px)} }
-  @keyframes float3{ from{transform:translateY(0)} to{transform:translateY(-1px)} }
-
-  /* first place burst */
-  .burst{
-    animation: burst .55s ease-out;
-  }
-  @keyframes burst{
-    0%{ transform:translateY(8px) scale(.99); filter:brightness(.95); opacity:.65 }
-    100%{ transform:translateY(0) scale(1); filter:brightness(1.05); opacity:1 }
-  }
-
-  /* HOT badge (>=150) */
-  .hot{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    padding:6px 10px;
-    border-radius:999px;
-    background:#ff1313;
-    border:1px solid rgba(255,255,255,.18);
-    font-weight:950;
-    font-size:12px;
-    box-shadow: 0 0 16px rgba(255,0,0,.55);
-    animation: hotPulse .9s ease-in-out infinite alternate;
-  }
-  @keyframes hotPulse{
-    from{ transform:scale(1); opacity:1 }
-    to{ transform:scale(1.06); opacity:.75 }
-  }
-
-  .focusList{display:flex; flex-direction:column; gap:10px}
-
-  /* confetti canvas */
-  #fx{
-    position:fixed; inset:0;
-    pointer-events:none;
-    z-index:3;
-  }
-
-  /* game overlay */
-  .gameOverlay{
-    position:fixed; inset:0; z-index:9999;
-    background:
-      radial-gradient(900px 600px at 50% 18%, rgba(35,213,255,.12), transparent 60%),
-      radial-gradient(800px 500px at 30% 30%, rgba(255,67,209,.10), transparent 60%),
-      linear-gradient(180deg, #04000a, #000);
-    display:flex; flex-direction:column;
-  }
-  .gameTop{
-    display:flex; justify-content:space-between; align-items:center;
-    padding:12px 14px;
-    border-bottom:1px solid rgba(255,255,255,.14);
-    background: rgba(0,0,0,.25);
-    backdrop-filter: blur(10px);
-    gap:10px;
-  }
-  .gameTitle{font-weight:950; letter-spacing:.02em;}
-  .gameHud{font-weight:950; opacity:.92}
-  .gameBtn{
-    padding:10px 12px;
-    border-radius:16px;
-    border:1px solid rgba(255,255,255,.18);
-    background: rgba(255,255,255,.06);
-    color: rgba(255,255,255,.92);
-    font-weight:950;
-    cursor:pointer;
-    user-select:none;
-  }
-  .gameCanvas{width:100%; height:100%; display:block;}
-  .touchPad{
-    position:fixed;
-    left:0; right:0; bottom:0;
-    display:flex; gap:12px;
-    padding:12px;
-  }
-  .touchPad .gameBtn{
-    flex:1;
-    text-align:center;
-    font-size:18px;
-    padding:14px 12px;
-    background: rgba(255,255,255,.08);
-  }
-
-  /* small screens title sizing */
-  @media(max-width:520px){
-    h1{font-size:38px}
-    .nameLine{max-width:62vw}
-  }
-</style>
+    /* Game overlay */
+    .gameOverlay{position:fixed; inset:0; z-index:9999;
+      background: radial-gradient(900px 600px at 50% 20%, rgba(34,211,238,.12), transparent 60%),
+                  linear-gradient(180deg, #06000c, #000);
+      display:flex; flex-direction:column;
+    }
+    .gameTopbar{
+      display:flex; align-items:center; justify-content:space-between; padding:12px 14px;
+      border-bottom:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.25); backdrop-filter: blur(10px); gap:10px;
+    }
+    .gameTitle{font-weight:950; letter-spacing:.02em;}
+    .gameBtns{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    .gameBtn{
+      padding:10px 12px; border-radius:16px; border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06); color: rgba(255,255,255,.92);
+      font-weight:950; user-select:none; cursor:pointer;
+    }
+    .gameHud{font-weight:950; color: rgba(255,255,255,.90);}
+    .gameCanvas{width:100%; height:100%; display:block;}
+    .touchPad{position:fixed; left:0; right:0; bottom:0; display:flex; justify-content:space-between; padding:12px; gap:12px;}
+    .touchPad .gameBtn{flex:1; text-align:center; font-size:18px; padding:14px 12px; background: rgba(255,255,255,.08);}
+  </style>
 </head>
 
 <body>
-  <div class="aurora"></div>
-  <div class="sparkles"></div>
-  <div class="grain"></div>
-  <canvas id="fx"></canvas>
+  <div class="sparkle"></div>
+  <div id="app"></div>
 
-  <div class="wrap">
-    <div class="header">
-      <div>
-        <h1>SVT Official FantaSanremo</h1>
-        <div class="subtitleRow">
-          <span class="chip">🏆</span>
-          <span class="chip">✨</span>
-          <span class="chip">🔥 HOT ≥ 150</span>
-          <span class="chip">🪓</span>
-        </div>
-      </div>
-    </div>
+  <script>
+    // ============================================================
+    // ✅ OPZIONE 1 (ADMIN CENTRALE)
+    // Tu aggiorni i punteggi nel codice e fai Commit su GitHub.
+    // Tutti vedono la classifica aggiornata dal link.
+    // ============================================================
 
-    <div class="tabs">
-      <button class="tab active" id="tab_tot" onclick="setTab('tot')">Classifica</button>
-      <button class="tab" id="tab_n1" onclick="setTab('n1')">Serata 1</button>
-      <button class="tab" id="tab_n2" onclick="setTab('n2')">Serata 2</button>
-      <button class="tab" id="tab_n3" onclick="setTab('n3')">Serata 3</button>
-      <button class="tab" id="tab_n4" onclick="setTab('n4')">Serata 4</button>
-      <button class="tab" id="tab_n5" onclick="setTab('n5')">Finale</button>
-    </div>
+    const LEAGUE_NAME = "SVT Official FantaSanremo";
 
-    <div class="grid cols2">
-      <div class="card" id="mainCard"></div>
-      <div class="card" id="sideCard"></div>
-    </div>
-  </div>
+    const HOT_THRESHOLD = 150; // ✅ HOT ora scatta a 150
 
-<script>
-/* =========================
-   DATA (ADMIN CENTRAL)
-   Edit only POINTS / EXTRA.
-   ========================= */
+    const NIGHTS = [
+      { id: "n1", label: "Serata 1" },
+      { id: "n2", label: "Serata 2" },
+      { id: "n3", label: "Serata 3" },
+      { id: "n4", label: "Serata 4" },
+      { id: "n5", label: "Finale" },
+    ];
 
-const TEAMS = [
-  { name:"Geberit", icon:"🚽", cap:"DARGEN D’AMICO", roster:["DARGEN D’AMICO","Malika Ayane","lda & Aka7"] },
-  { name:"Ghigliottina", icon:"🪓", cap:"MARIA ANTONIETTA & COLOMBRE", roster:["MARIA ANTONIETTA & COLOMBRE","Tredici Pietro","Levante"] },
-  { name:"Mud Max", icon:"🏜️", cap:"SAYF", roster:["SAYF","Mara Sattei","Ditonellapiaga"] },
-  { name:"Sunday Bini", icon:"🍹", cap:"SAL DA VINCI", roster:["SAL DA VINCI","Samurai Jack","Eddie Brock"] },
-  { name:"OpenAi Collective", icon:"🤖", cap:"FEDEZ & MASINI", roster:["FEDEZ & MASINI","Ermal Meta","Fulminacci"] },
-  { name:"Bradbury", icon:"📚", cap:"TOMMASO PARADISO", roster:["TOMMASO PARADISO","Patty Pravo","Bambole di pezza"] },
-  { name:"Branca Menta", icon:"🍃", cap:"SERENA BRANCALE", roster:["SERENA BRANCALE","Nayf","Michele Bravi"] },
-  { name:"Eclissi", icon:"🌑", cap:"ARISA", roster:["ARISA","Chiello","Elettra Lamborghini"] },
-  { name:"I Gasati", icon:"⛽", cap:"LEO GASSMAN", roster:["LEO GASSMAN","Raf","Jax"] },
-  { name:"Tempo Libero: Rolex", icon:"⌚", cap:"FRANCESCO RENGA", roster:["FRANCESCO RENGA","Luché","Enrico Nigiotti"] },
-];
+    const TEAMS = [
+      { name: "Geberit", icon: "🚽", captain: "DARGEN D’AMICO", roster: ["DARGEN D’AMICO","Malika Ayane","lda & Aka7"] },
+      { name: "Ghigliottina", icon: "🪓", captain: "MARIA ANTONIETTA & COLOMBRE", roster: ["MARIA ANTONIETTA & COLOMBRE","Tredici Pietro","Levante"] },
+      { name: "Mud Max", icon: "🏜️", captain: "SAYF", roster: ["SAYF","Mara Sattei","Ditonellapiaga"] },
+      { name: "Sunday Bini", icon: "🍹", captain: "SAL DA VINCI", roster: ["SAL DA VINCI","Samurai Jack","Eddie Brock"] },
+      { name: "OpenAi Collective", icon: "🤖", captain: "FEDEZ & MASINI", roster: ["FEDEZ & MASINI","Ermal Meta","Fulminacci"] },
+      { name: "Bradbury", icon: "📚", captain: "TOMMASO PARADISO", roster: ["TOMMASO PARADISO","Patty Pravo","Bambole di pezza"] },
+      { name: "Branca Menta", icon: "🍃", captain: "SERENA BRANCALE", roster: ["SERENA BRANCALE","Nayf","Michele Bravi"] },
+      { name: "Eclissi", icon: "🌑", captain: "ARISA", roster: ["ARISA","Chiello","Elettra Lamborghini"] },
+      { name: "I Gasati", icon: "⛽", captain: "LEO GASSMAN", roster: ["LEO GASSMAN","Raf","Jax"] },
+      { name: "Tempo Libero: Rolex", icon: "⌚", captain: "FRANCESCO RENGA", roster: ["FRANCESCO RENGA","Luché","Enrico Nigiotti"] },
+    ];
 
-const NIGHTS = [
-  { id:"n1", label:"Serata 1" },
-  { id:"n2", label:"Serata 2" },
-  { id:"n3", label:"Serata 3" },
-  { id:"n4", label:"Serata 4" },
-  { id:"n5", label:"Finale" }
-];
+    // ============================================================
+    // ✅ QUI INSERISCI I PUNTEGGI (ADMIN)
+    // ============================================================
+    const ADMIN_POINTS = {
+      n1: {
+        // "ARISA": 14,
+      },
+      n2: {},
+      n3: {},
+      n4: {},
+      n5: {}
+    };
 
-// Points per night by artist name
-const POINTS = {
-  n1: { /* "ARISA": 14, */ },
-  n2: { },
-  n3: { },
-  n4: { },
-  n5: { }
-};
+    // Extra per squadra per serata (opzionale)
+    const ADMIN_EXTRA = {
+      n1: {
+        // "Geberit": 0,
+      },
+      n2: {},
+      n3: {},
+      n4: {},
+      n5: {}
+    };
 
-// Optional manual deltas per team name (bonus/malus)
-const EXTRA = {
-  n1: { /* "Geberit": 0 */ },
-  n2: { },
-  n3: { },
-  n4: { },
-  n5: { }
-};
+    // ============================================================
+    // Logic
+    // ============================================================
+    const clamp = (x) => (Number.isFinite(Number(x)) ? Number(x) : 0);
+    const norm = (s) => String(s||"").trim().replace(/\s+/g," ").toLowerCase();
 
-/* =========================
-   LOGIC
-   ========================= */
+    function getPoints(pointsMap, artist){
+      if(pointsMap[artist] != null) return clamp(pointsMap[artist]);
+      const key = norm(artist);
+      if(!key) return 0;
+      for(const [k,v] of Object.entries(pointsMap)){
+        if(norm(k)===key) return clamp(v);
+      }
+      return 0;
+    }
 
-const HOT_THRESHOLD = 150;
+    function computeTeamNight(team, nightId){
+      const ptsMap = ADMIN_POINTS[nightId] || {};
+      const extraByTeam = ADMIN_EXTRA[nightId] || {};
+      let sum = 0;
 
-const norm = (s)=> String(s||"").trim().replace(/\s+/g," ").toLowerCase();
+      for(const a of (team.roster||[])) sum += getPoints(ptsMap, a);
+      const capPts = getPoints(ptsMap, team.captain);
+      sum += capPts; // captain x2
+      sum += clamp(extraByTeam[team.name] ?? 0);
+      return Math.round(sum*10)/10;
+    }
 
-function getPoints(map, artist){
-  if(map[artist] != null) return Number(map[artist]) || 0;
-  const key = norm(artist);
-  if(!key) return 0;
-  for(const [k,v] of Object.entries(map)){
-    if(norm(k) === key) return Number(v) || 0;
-  }
-  return 0;
-}
+    function computeNightStandings(nightId){
+      const rows = TEAMS.map(team=>{
+        const total = computeTeamNight(team, nightId);
+        return { team, total, hot: total >= HOT_THRESHOLD }; // ✅ HOT a 150
+      });
+      rows.sort((a,b)=>b.total-a.total);
+      return rows;
+    }
 
-function teamNightScore(team, nightId){
-  const m = POINTS[nightId] || {};
-  const ex = EXTRA[nightId] || {};
-  let sum = 0;
-  for(const a of team.roster) sum += getPoints(m, a);
-  const capPts = getPoints(m, team.cap);
-  sum += capPts; // captain x2
-  sum += Number(ex[team.name] || 0);
-  return Math.round(sum*10)/10;
-}
+    function computeStandings(){
+      const rows = TEAMS.map(team=>{
+        let total=0;
+        for(const n of NIGHTS) total += computeTeamNight(team, n.id);
+        return { team, total: Math.round(total*10)/10 };
+      });
+      rows.sort((a,b)=>b.total-a.total);
+      return rows;
+    }
 
-function teamTotalScore(team){
-  let tot = 0;
-  for(const n of NIGHTS) tot += teamNightScore(team, n.id);
-  return Math.round(tot*10)/10;
-}
+    // UI state
+    let tab = "classifica";
+    let nightId = "n1";
+    let lastTopKey = "";
 
-function standingsFor(nightIdOrTot){
-  if(nightIdOrTot === "tot"){
-    const rows = TEAMS.map(t=>({ team:t, score: teamTotalScore(t), hot:false }));
-    rows.sort((a,b)=>b.score-a.score);
-    return rows;
-  }
-  const rows = TEAMS.map(t=>{
-    const s = teamNightScore(t, nightIdOrTot);
-    return { team:t, score:s, hot: s >= HOT_THRESHOLD };
-  });
-  rows.sort((a,b)=>b.score-a.score);
-  return rows;
-}
+    function podiumClass(idx){
+      if(idx===0) return "podium-1";
+      if(idx===1) return "podium-2";
+      if(idx===2) return "podium-3";
+      return "";
+    }
+    function medalBadge(idx){
+      if(idx===0) return `<span class="medal">🥇 1°</span>`;
+      if(idx===1) return `<span class="medal">🥈 2°</span>`;
+      if(idx===2) return `<span class="medal">🥉 3°</span>`;
+      return "";
+    }
 
-function medal(idx){
-  if(idx===0) return `<span class="medal">🥇 1°</span>`;
-  if(idx===1) return `<span class="medal">🥈 2°</span>`;
-  if(idx===2) return `<span class="medal">🥉 3°</span>`;
-  return "";
-}
+    function renderApp(){
+      const root = document.getElementById("app");
 
-function podiumClass(idx){
-  if(idx===0) return "pod1";
-  if(idx===1) return "pod2";
-  if(idx===2) return "pod3";
-  return "";
-}
+      const standings = computeStandings();
+      const nightStandings = computeNightStandings(nightId);
 
-/* =========================
-   UI
-   ========================= */
+      const newTopKey = standings.slice(0,3).map(r=>r.team.name).join("|");
+      const podiumChanged = (newTopKey && newTopKey !== lastTopKey);
+      lastTopKey = newTopKey;
 
-let currentTab = "tot";
-let lastFirst = null;
-
-function setTab(tab){
-  currentTab = tab;
-  document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
-  const btn = document.getElementById("tab_"+tab);
-  if(btn) btn.classList.add("active");
-  render();
-}
-
-function render(){
-  const main = document.getElementById("mainCard");
-  const side = document.getElementById("sideCard");
-
-  const totRows = standingsFor("tot");
-  const curRows = standingsFor(currentTab);
-
-  // confetti if first place changed (general standings)
-  const first = totRows[0]?.team?.name || null;
-  const firstChanged = (lastFirst && first && lastFirst !== first);
-  lastFirst = first;
-  if(firstChanged) confettiBurst();
-
-  // main = general standings always
-  const burstClass = firstChanged ? "burst" : "";
-  main.innerHTML = `
-    <div class="focusList">
-      ${totRows.map((r,idx)=>`
-        <div class="rank ${podiumClass(idx)} ${idx===0?burstClass:""}" data-team="${escAttr(r.team.name)}">
-          <div class="left">
-            <div class="pos">${idx+1}.</div>
-            <div class="badgeIcon">${esc(r.team.icon)}</div>
-            <div class="nameLine" title="${escAttr(r.team.name)}">
-              ${esc(r.team.name)} ${medal(idx)}
+      root.innerHTML = `
+        <div class="wrap">
+          <div class="top">
+            <div class="brand">
+              <div class="badge">✨ SVT League App • ADMIN CENTRALE (GitHub) • PODIO + HOT + Easter egg</div>
+              <h1 class="h1">${escapeHtml(LEAGUE_NAME)}</h1>
+              <div class="sub">Tu aggiorni i punteggi nel codice e fai Commit su GitHub. Tutti vedono la classifica aggiornata dal link. HOT: ≥ ${HOT_THRESHOLD} punti in una serata. Triplo tap su “Ghigliottina” → minigioco 🪓</div>
+              <div class="kpi">
+                <div class="pill">👥 ${TEAMS.length} squadre</div>
+                <div class="pill">📅 ${NIGHTS.length} serate</div>
+                <div class="pill">👑 Cap x2</div>
+                <div class="pill">🔥 HOT: ≥ ${HOT_THRESHOLD}/serata</div>
+              </div>
             </div>
           </div>
-          <div class="score">${r.score}</div>
+
+          <div class="tabs">
+            <button class="tab ${tab==="classifica"?"active":""}" data-tab="classifica">🏆 Classifica</button>
+            <button class="tab ${tab==="serata"?"active":""}" data-tab="serata">📅 Serata</button>
+            <button class="tab ${tab==="admin"?"active":""}" data-tab="admin">🛠️ Admin</button>
+          </div>
+
+          ${tab==="classifica" ? renderClassifica(standings, nightStandings, podiumChanged) : ""}
+          ${tab==="serata" ? renderSerata(nightStandings) : ""}
+          ${tab==="admin" ? renderAdminHelp() : ""}
+
+          <div class="footer">SVT Official FantaSanremo — admin centrale su GitHub • tip: se cache, aggiungi ?v=1 all’URL</div>
         </div>
-      `).join("")}
-    </div>
-  `;
+      `;
 
-  // side = selected night standings
-  const label = currentTab==="tot" ? "Serata 1" : (NIGHTS.find(x=>x.id===currentTab)?.label || "");
-  const showRows = currentTab==="tot" ? standingsFor("n1") : curRows;
+      document.querySelectorAll(".tab").forEach(b=>{
+        b.addEventListener("click", ()=>{ tab = b.dataset.tab; renderApp(); });
+      });
+      document.querySelectorAll("[data-night]").forEach(b=>{
+        b.addEventListener("click", ()=>{ nightId = b.dataset.night; renderApp(); });
+      });
+    }
 
-  side.innerHTML = `
-    <div class="focusList">
-      ${showRows.map((r,idx)=>`
-        <div class="rank ${podiumClass(idx)}" data-team="${escAttr(r.team.name)}">
-          <div class="left">
-            <div class="pos">${idx+1}.</div>
-            <div class="badgeIcon">${esc(r.team.icon)}</div>
-            <div class="nameLine" title="${escAttr(r.team.name)}">
-              ${esc(r.team.name)} ${medal(idx)}
-              ${r.hot ? `<span class="hot">🔥 HOT</span>` : ``}
+    function renderClassifica(standings, nightStandings, podiumChanged){
+      return `
+        <div class="grid cols2">
+          <div class="card">
+            <div class="title">
+              <div class="ibox">🏆</div>
+              <div>
+                <div class="t1">Classifica generale</div>
+                <div class="t2">Somma delle serate — podio animato ✨</div>
+              </div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:10px">
+              ${standings.map((r,idx)=>{
+                const bump = podiumChanged && idx<3 ? "bump" : "";
+                return `
+                  <div class="rankRow ${podiumClass(idx)} ${bump}" data-teamrow="1" data-teamname="${escapeAttr(r.team.name)}">
+                    <div class="teamLeft">
+                      <div class="teamIcon">${escapeHtml(r.team.icon)}</div>
+                      <div>
+                        <div style="font-weight:950">
+                          #${idx+1} — ${escapeHtml(r.team.name)}
+                          ${medalBadge(idx)}
+                        </div>
+                        <div class="small">Cap: <span class="mono" style="font-weight:900">${escapeHtml(r.team.captain||"—")}</span></div>
+                      </div>
+                    </div>
+                    <div class="big">${r.total}</div>
+                  </div>
+                `;
+              }).join("")}
             </div>
           </div>
-          <div class="score">${r.score}</div>
+
+          <div class="card">
+            <div class="title">
+              <div class="ibox">📅</div>
+              <div>
+                <div class="t1">Focus serata</div>
+                <div class="t2">HOT se ≥ ${HOT_THRESHOLD} punti in questa serata.</div>
+              </div>
+            </div>
+
+            <div class="nightBtns">
+              ${NIGHTS.map(n=>`
+                <button class="nightBtn ${nightId===n.id?"active":""}" data-night="${n.id}">${escapeHtml(n.label)}</button>
+              `).join("")}
+            </div>
+
+            <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px">
+              ${nightStandings.slice(0,6).map((r,idx)=>`
+                <div class="rankRow ${podiumClass(idx)}" style="padding:10px 12px" data-teamrow="1" data-teamname="${escapeAttr(r.team.name)}">
+                  <div class="teamLeft" style="gap:8px">
+                    <div style="width:26px; font-weight:950">#${idx+1}</div>
+                    <div style="font-size:18px">${escapeHtml(r.team.icon)}</div>
+                    <div style="font-weight:900">
+                      ${escapeHtml(r.team.name)}
+                      ${r.hot ? `<span class="hotBadge">🔥 HOT</span>` : ""}
+                    </div>
+                  </div>
+                  <div style="font-weight:950">${r.total}</div>
+                </div>
+              `).join("")}
+            </div>
+
+            <div class="mutebox" style="margin-top:12px">
+              Cache? Apri il link con <span class="mono">?v=1</span> (o numero a caso) per forzare aggiornamento.
+            </div>
+          </div>
         </div>
-      `).join("")}
-    </div>
-  `;
+      `;
+    }
 
-  attachGhigliottinaTriple();
-}
+    function renderSerata(nightStandings){
+      return `
+        <div class="card">
+          <div class="title">
+            <div class="ibox">📅</div>
+            <div>
+              <div class="t1">Classifica serata</div>
+              <div class="t2">Legge i punti da <span class="mono">ADMIN_POINTS.${nightId}</span> nel codice. HOT: ≥ ${HOT_THRESHOLD}.</div>
+            </div>
+          </div>
 
-function esc(s){
-  return String(s ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-function escAttr(s){ return esc(s).replaceAll("\n"," "); }
+          <div class="nightBtns">
+            ${NIGHTS.map(n=>`
+              <button class="nightBtn ${nightId===n.id?"active":""}" data-night="${n.id}">${escapeHtml(n.label)}</button>
+            `).join("")}
+          </div>
 
-/* =========================
-   CONFETTI
-   ========================= */
+          <div style="margin-top:14px; display:flex; flex-direction:column; gap:10px">
+            ${nightStandings.map((r,idx)=>`
+              <div class="rankRow ${podiumClass(idx)}" data-teamrow="1" data-teamname="${escapeAttr(r.team.name)}">
+                <div class="teamLeft">
+                  <div class="teamIcon">${escapeHtml(r.team.icon)}</div>
+                  <div>
+                    <div style="font-weight:950">
+                      #${idx+1} — ${escapeHtml(r.team.name)}
+                      ${medalBadge(idx)}
+                      ${r.hot ? `<span class="hotBadge">🔥 HOT</span>` : ""}
+                    </div>
+                    <div class="small">Cap: <span class="mono" style="font-weight:900">${escapeHtml(r.team.captain||"—")}</span></div>
+                  </div>
+                </div>
+                <div class="big">${r.total}</div>
+              </div>
+            `).join("")}
+          </div>
 
-const fx = document.getElementById("fx");
-const fxc = fx.getContext("2d");
-let confetti = [];
-let fxRunning = false;
+          <div class="mutebox" style="margin-top:12px">
+            Vuoi aggiornare i punti? Vai su GitHub → <b>index.html</b> → modifica la sezione <span class="mono">ADMIN_POINTS</span> → Commit.
+          </div>
+        </div>
+      `;
+    }
 
-function resizeFx(){
-  fx.width = Math.floor(window.innerWidth * devicePixelRatio);
-  fx.height = Math.floor(window.innerHeight * devicePixelRatio);
-  fx.style.width = window.innerWidth+"px";
-  fx.style.height = window.innerHeight+"px";
-  fxc.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
-}
-window.addEventListener("resize", resizeFx);
-resizeFx();
+    function renderAdminHelp(){
+      return `
+        <div class="grid cols2">
+          <div class="card">
+            <div class="title">
+              <div class="ibox">🛠️</div>
+              <div>
+                <div class="t1">Come aggiorni i punteggi</div>
+                <div class="t2">Modifica solo <span class="mono">ADMIN_POINTS</span> e fai Commit.</div>
+              </div>
+            </div>
 
-function confettiBurst(){
-  const cx = window.innerWidth * 0.5;
-  const cy = 120;
-  const n = 140;
-  for(let i=0;i<n;i++){
-    const a = Math.random()*Math.PI*2;
-    const sp = 3 + Math.random()*6;
-    confetti.push({
-      x: cx + (Math.random()*30-15),
-      y: cy + (Math.random()*20-10),
-      vx: Math.cos(a)*sp,
-      vy: Math.sin(a)*sp - (2+Math.random()*3),
-      r: 2 + Math.random()*4,
-      rot: Math.random()*Math.PI,
-      vr: (Math.random()-.5)*0.25,
-      life: 70 + Math.random()*55,
-      hue: (Math.random()*360)|0
-    });
-  }
-  if(!fxRunning){
-    fxRunning = true;
-    requestAnimationFrame(fxLoop);
-  }
-}
+            <div class="mutebox">
+              <b>Esempio (Serata 1):</b><br><br>
+              <span class="mono">const ADMIN_POINTS = {<br>
+              &nbsp;&nbsp;n1: {<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;"ARISA": 14,<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;"Raf": 7,<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;"Enrico Nigiotti": -5<br>
+              &nbsp;&nbsp;},<br>
+              &nbsp;&nbsp;n2: {}, n3: {}, n4: {}, n5: {}<br>
+              };</span><br><br>
+              <b>Capitano x2</b> è automatico. HOT scatta a <b>${HOT_THRESHOLD}</b> in una serata.
+            </div>
+          </div>
 
-function fxLoop(){
-  fxc.clearRect(0,0,window.innerWidth,window.innerHeight);
+          <div class="card">
+            <div class="title">
+              <div class="ibox">🪓</div>
+              <div>
+                <div class="t1">Easter egg</div>
+                <div class="t2">Triplo tap su “Ghigliottina” → minigioco.</div>
+              </div>
+            </div>
 
-  // soft glow overlay
-  fxc.globalAlpha = 0.12;
-  fxc.fillStyle = "#fff";
-  fxc.fillRect(0,0,1,1);
-  fxc.globalAlpha = 1;
+            <div class="mutebox">
+              Minigioco stile Game&Watch: pelato orizzontale + carte blu che cadono. Se ne perdi 5 → game over.
+            </div>
+          </div>
+        </div>
+      `;
+    }
 
-  const g = 0.14;
-  for(let i=confetti.length-1;i>=0;i--){
-    const p = confetti[i];
-    p.vy += g;
-    p.x += p.vx;
-    p.y += p.vy;
-    p.rot += p.vr;
-    p.life -= 1;
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+    function escapeAttr(str){ return escapeHtml(str).replaceAll("\n"," "); }
 
-    fxc.save();
-    fxc.translate(p.x, p.y);
-    fxc.rotate(p.rot);
-    fxc.fillStyle = `hsl(${p.hue} 95% 65%)`;
-    fxc.globalAlpha = Math.max(0, Math.min(1, p.life/50));
-    fxc.fillRect(-p.r, -p.r*0.6, p.r*2.4, p.r*1.2);
-    fxc.restore();
+    // ==========
+    // Easter egg: triple tap on "Ghigliottina"
+    // ==========
+    let ghCount = 0;
+    let ghTimer = null;
+    document.addEventListener("click", (e)=>{
+      const row = e.target.closest("[data-teamrow='1']");
+      if(!row) return;
+      const teamName = row.getAttribute("data-teamname") || "";
+      if(norm(teamName) !== "ghigliottina") return;
 
-    if(p.life <= 0 || p.y > window.innerHeight+40) confetti.splice(i,1);
-  }
-  fxc.globalAlpha = 1;
-
-  if(confetti.length){
-    requestAnimationFrame(fxLoop);
-  }else{
-    fxRunning = false;
-    fxc.clearRect(0,0,window.innerWidth,window.innerHeight);
-  }
-}
-
-/* =========================
-   EASTER EGG: Ghigliottina triple tap
-   ========================= */
-
-let ghCount = 0;
-let ghTimer = null;
-
-function attachGhigliottinaTriple(){
-  document.querySelectorAll("[data-team='Ghigliottina']").forEach(el=>{
-    el.onclick = ()=>{
       ghCount++;
       clearTimeout(ghTimer);
-      ghTimer = setTimeout(()=> ghCount=0, 850);
-      if(ghCount>=3){
-        ghCount=0;
-        startGame();
+      ghTimer = setTimeout(()=> ghCount = 0, 900);
+
+      if(ghCount >= 3){
+        ghCount = 0;
+        startGhigliottinaGame();
       }
-    };
-  });
-}
-
-/* =========================
-   MINIGAME (simple Game&Watch)
-   ========================= */
-
-function startGame(){
-  const overlay = document.createElement("div");
-  overlay.className = "gameOverlay";
-  overlay.innerHTML = `
-    <div class="gameTop">
-      <div class="gameTitle">🪓 Ghigliottina</div>
-      <div style="display:flex; gap:10px; align-items:center;">
-        <div class="gameHud" id="hud">Score: 0 · Miss: 0/5</div>
-        <button class="gameBtn" id="exit">Esci</button>
-      </div>
-    </div>
-    <canvas class="gameCanvas" id="c"></canvas>
-    <div class="touchPad">
-      <button class="gameBtn" id="L">◀</button>
-      <button class="gameBtn" id="R">▶</button>
-    </div>
-  `;
-  document.body.appendChild(overlay);
-
-  const canvas = overlay.querySelector("#c");
-  const ctx = canvas.getContext("2d", {alpha:false});
-  const hud = overlay.querySelector("#hud");
-
-  function resize(){
-    const topH = overlay.querySelector(".gameTop").offsetHeight;
-    const w = window.innerWidth;
-    const h = window.innerHeight - topH;
-    canvas.width = Math.floor(w*devicePixelRatio);
-    canvas.height = Math.floor(h*devicePixelRatio);
-    canvas.style.width = w+"px";
-    canvas.style.height = h+"px";
-    ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
-  }
-  resize();
-  window.addEventListener("resize", resize);
-
-  let running = true;
-  let score = 0;
-  let miss = 0;
-  let playerX = window.innerWidth/2;
-  const cards = [];
-  let leftHeld=false, rightHeld=false;
-
-  const exit = ()=>{
-    running=false;
-    window.removeEventListener("resize", resize);
-    window.removeEventListener("keydown", onKey);
-    window.removeEventListener("keyup", onKey);
-    overlay.remove();
-  };
-  overlay.querySelector("#exit").addEventListener("click", exit);
-
-  // Controls
-  const L = overlay.querySelector("#L");
-  const R = overlay.querySelector("#R");
-
-  const holdStart = (side)=> (e)=>{ e.preventDefault(); if(side==="L") leftHeld=true; else rightHeld=true; };
-  const holdEnd = (side)=> (e)=>{ e.preventDefault(); if(side==="L") leftHeld=false; else rightHeld=false; };
-
-  ["touchstart","mousedown"].forEach(ev=>{
-    L.addEventListener(ev, holdStart("L"), {passive:false});
-    R.addEventListener(ev, holdStart("R"), {passive:false});
-  });
-  ["touchend","touchcancel","mouseup","mouseleave"].forEach(ev=>{
-    L.addEventListener(ev, holdEnd("L"), {passive:false});
-    R.addEventListener(ev, holdEnd("R"), {passive:false});
-  });
-
-  function onKey(e){
-    if(e.key==="ArrowLeft") leftHeld = (e.type==="keydown");
-    if(e.key==="ArrowRight") rightHeld = (e.type==="keydown");
-    if(e.key==="Escape") exit();
-  }
-  window.addEventListener("keydown", onKey);
-  window.addEventListener("keyup", onKey);
-
-  function spawn(){
-    cards.push({
-      x: 20 + Math.random()*(window.innerWidth-40),
-      y: -30,
-      vy: 3.2 + Math.random()*2.6
     });
-  }
-  const spawnTimer = setInterval(()=>{ if(running) spawn(); }, 700);
 
-  function drawBaldMan(x,y){
-    // head
-    ctx.fillStyle = "rgba(255,255,255,.94)";
-    ctx.beginPath();
-    ctx.arc(x,y,18,0,Math.PI*2);
-    ctx.fill();
-    // body
-    ctx.fillRect(x-12,y+18,24,28);
-    // tiny shine
-    ctx.fillStyle = "rgba(0,0,0,.12)";
-    ctx.beginPath();
-    ctx.arc(x-6,y-7,6,0,Math.PI*2);
-    ctx.fill();
-  }
+    function startGhigliottinaGame(){
+      const overlay = document.createElement("div");
+      overlay.className = "gameOverlay";
+      overlay.innerHTML = `
+        <div class="gameTopbar">
+          <div class="gameTitle">🪓 Ghigliottina — MiniGame (Game&Watch)</div>
+          <div class="gameBtns">
+            <div class="gameHud" id="gameHud">Score: 0 · Miss: 0/5</div>
+            <button class="gameBtn" id="btnExit">Esci ✖</button>
+          </div>
+        </div>
+        <canvas class="gameCanvas" id="gameCanvas"></canvas>
+        <div class="touchPad">
+          <button class="gameBtn" id="btnLeft">◀</button>
+          <button class="gameBtn" id="btnRight">▶</button>
+        </div>
+      `;
+      document.body.appendChild(overlay);
 
-  function loop(){
-    if(!running){
-      clearInterval(spawnTimer);
-      return;
-    }
+      const canvas = overlay.querySelector("#gameCanvas");
+      const ctx = canvas.getContext("2d", { alpha: false });
+      const hud = overlay.querySelector("#gameHud");
+      const btnExit = overlay.querySelector("#btnExit");
 
-    const W = window.innerWidth;
-    const H = canvas.clientHeight;
-
-    // background
-    ctx.fillStyle = "#000";
-    ctx.fillRect(0,0,W,H);
-
-    // neon horizon
-    const grd = ctx.createLinearGradient(0,H,0,H-180);
-    grd.addColorStop(0,"rgba(255,67,209,.00)");
-    grd.addColorStop(1,"rgba(35,213,255,.10)");
-    ctx.fillStyle = grd;
-    ctx.fillRect(0,H-220,W,220);
-
-    // move player
-    if(leftHeld) playerX -= 9;
-    if(rightHeld) playerX += 9;
-    playerX = Math.max(20, Math.min(W-20, playerX));
-
-    // update cards
-    const py = H-95;
-    for(let i=cards.length-1;i>=0;i--){
-      const c = cards[i];
-      c.y += c.vy;
-
-      // draw card
-      ctx.fillStyle = "#2f7dff";
-      ctx.fillRect(c.x-9,c.y-12,18,24);
-      ctx.fillStyle = "rgba(255,255,255,.65)";
-      ctx.fillRect(c.x-5,c.y-7,10,4);
-
-      // collision
-      const hit = Math.abs(c.x - playerX) < 22 && Math.abs(c.y - (py+20)) < 30;
-      if(hit){
-        score++;
-        cards.splice(i,1);
-        continue;
+      function resize(){
+        const topbarH = overlay.querySelector(".gameTopbar").offsetHeight;
+        const w = window.innerWidth;
+        const h = window.innerHeight - topbarH;
+        canvas.width = Math.floor(w * devicePixelRatio);
+        canvas.height = Math.floor(h * devicePixelRatio);
+        canvas.style.height = h + "px";
+        canvas.style.width = w + "px";
+        ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
       }
-      if(c.y > H + 40){
-        miss++;
-        cards.splice(i,1);
-        continue;
+      resize();
+      window.addEventListener("resize", resize);
+
+      let running = true;
+      let playerX = window.innerWidth / 2;
+      const playerY = () => (canvas.clientHeight - 90);
+      const playerSpeed = 9;
+      const cards = [];
+      let score = 0;
+      let miss = 0;
+      let spawnT = 0;
+
+      let leftHeld = false;
+      let rightHeld = false;
+
+      const btnLeft = overlay.querySelector("#btnLeft");
+      const btnRight = overlay.querySelector("#btnRight");
+
+      const holdStart = (which)=> (e)=>{ e.preventDefault(); if(which==="L") leftHeld=true; else rightHeld=true; };
+      const holdEnd = (which)=> (e)=>{ e.preventDefault(); if(which==="L") leftHeld=false; else rightHeld=false; };
+
+      btnLeft.addEventListener("touchstart", holdStart("L"), {passive:false});
+      btnLeft.addEventListener("touchend", holdEnd("L"), {passive:false});
+      btnLeft.addEventListener("touchcancel", holdEnd("L"), {passive:false});
+      btnRight.addEventListener("touchstart", holdStart("R"), {passive:false});
+      btnRight.addEventListener("touchend", holdEnd("R"), {passive:false});
+      btnRight.addEventListener("touchcancel", holdEnd("R"), {passive:false});
+
+      btnLeft.addEventListener("mousedown", ()=> leftHeld=true);
+      btnLeft.addEventListener("mouseup", ()=> leftHeld=false);
+      btnLeft.addEventListener("mouseleave", ()=> leftHeld=false);
+      btnRight.addEventListener("mousedown", ()=> rightHeld=true);
+      btnRight.addEventListener("mouseup", ()=> rightHeld=false);
+      btnRight.addEventListener("mouseleave", ()=> rightHeld=false);
+
+      function onKey(e){
+        if(e.key === "ArrowLeft") leftHeld = (e.type==="keydown");
+        if(e.key === "ArrowRight") rightHeld = (e.type==="keydown");
+        if(e.key === "Escape") exit();
       }
+      window.addEventListener("keydown", onKey);
+      window.addEventListener("keyup", onKey);
+
+      function exit(){
+        running = false;
+        window.removeEventListener("resize", resize);
+        window.removeEventListener("keydown", onKey);
+        window.removeEventListener("keyup", onKey);
+        overlay.remove();
+      }
+      btnExit.addEventListener("click", exit);
+
+      function spawnCard(){
+        const x = Math.random() * (window.innerWidth - 40) + 20;
+        const speed = 3.2 + Math.random() * 2.2;
+        cards.push({ x, y: -20, vy: speed, w: 18, h: 24 });
+      }
+
+      function drawBaldMan(x, y){
+        ctx.fillStyle = "rgba(255,255,255,.92)";
+        ctx.beginPath(); ctx.arc(x, y, 18, 0, Math.PI*2); ctx.fill();
+        ctx.fillRect(x-12, y+18, 24, 26);
+        ctx.fillStyle = "rgba(0,0,0,.12)";
+        ctx.beginPath(); ctx.arc(x-6, y-6, 6, 0, Math.PI*2); ctx.fill();
+      }
+
+      function drawCard(c){
+        ctx.fillStyle = "#2f7dff";
+        ctx.fillRect(c.x - c.w/2, c.y - c.h/2, c.w, c.h);
+        ctx.fillStyle = "rgba(255,255,255,.65)";
+        ctx.fillRect(c.x - c.w/2 + 4, c.y - c.h/2 + 5, c.w-8, 4);
+      }
+
+      function loop(ts){
+        if(!running) return;
+        ctx.fillStyle = "#000";
+        ctx.fillRect(0, 0, window.innerWidth, canvas.clientHeight);
+
+        ctx.fillStyle = "rgba(255,255,255,.12)";
+        for(let i=0;i<18;i++){
+          const sx = (i*97 + (ts/20)) % window.innerWidth;
+          const sy = (i*53 + (ts/35)) % canvas.clientHeight;
+          ctx.fillRect(sx, sy, 2, 2);
+        }
+
+        if(leftHeld) playerX -= playerSpeed;
+        if(rightHeld) playerX += playerSpeed;
+        playerX = Math.max(20, Math.min(window.innerWidth - 20, playerX));
+
+        spawnT += 1;
+        if(spawnT % 28 === 0) spawnCard();
+
+        const py = playerY();
+        for(let i=cards.length-1;i>=0;i--){
+          const c = cards[i];
+          c.y += c.vy;
+
+          const hit = Math.abs(c.x - playerX) < 22 && Math.abs(c.y - (py+16)) < 28;
+          if(hit){ score++; cards.splice(i,1); continue; }
+          if(c.y > canvas.clientHeight + 40){ miss++; cards.splice(i,1); continue; }
+        }
+
+        for(const c of cards) drawCard(c);
+        drawBaldMan(playerX, py);
+        hud.textContent = `Score: ${score} · Miss: ${miss}/5`;
+
+        if(miss >= 5){
+          ctx.fillStyle = "rgba(0,0,0,.55)";
+          ctx.fillRect(0, 0, window.innerWidth, canvas.clientHeight);
+          ctx.fillStyle = "rgba(255,255,255,.95)";
+          ctx.font = "900 34px ui-sans-serif, system-ui";
+          ctx.fillText("GAME OVER", window.innerWidth/2 - 105, canvas.clientHeight/2 - 6);
+          running = false;
+          setTimeout(exit, 1600);
+          return;
+        }
+
+        requestAnimationFrame(loop);
+      }
+      requestAnimationFrame(loop);
     }
 
-    // player
-    drawBaldMan(playerX, py);
-
-    hud.textContent = `Score: ${score} · Miss: ${miss}/5`;
-
-    if(miss>=5){
-      ctx.fillStyle = "rgba(0,0,0,.55)";
-      ctx.fillRect(0,0,W,H);
-      ctx.fillStyle = "rgba(255,255,255,.95)";
-      ctx.font = "900 34px ui-sans-serif, system-ui";
-      ctx.fillText("GAME OVER", W/2-105, H/2-6);
-      running=false;
-      setTimeout(exit, 1400);
-      return;
-    }
-
-    requestAnimationFrame(loop);
-  }
-  requestAnimationFrame(loop);
-}
-
-/* boot */
-render();
-
-</script>
+    // boot
+    renderApp();
+  </script>
 </body>
 </html>
