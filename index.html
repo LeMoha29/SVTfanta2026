@@ -1,159 +1,782 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>SVT Official FantaSanremo</title>
-<script src="https://cdn.tailwindcss.com"></script>
-</head>
-
-<body class="bg-zinc-100 min-h-screen p-6">
-
-<div class="max-w-4xl mx-auto">
-
-<h1 class="text-3xl font-extrabold mb-6">
-🏆 SVT Official FantaSanremo
-</h1>
-
-<div class="bg-white p-6 rounded-2xl shadow space-y-6">
-
-<h2 class="text-xl font-bold">Squadre</h2>
-<div id="teams"></div>
-
-<button onclick="addTeam()" class="bg-black text-white px-4 py-2 rounded-xl">
-+ Aggiungi Squadra
-</button>
-
-<hr>
-
-<h2 class="text-xl font-bold">Inserisci Punti Serata</h2>
-
-<textarea id="bulkInput" rows="5" class="w-full border rounded-xl p-3"
-placeholder="Formato:
-Annalisa = 14
-Ghali = 7"></textarea>
-
-<button onclick="applyPoints()" class="bg-black text-white px-4 py-2 rounded-xl mt-2">
-Calcola
-</button>
-
-<hr>
-
-<h2 class="text-xl font-bold">Classifica</h2>
-<div id="standings"></div>
-
-</div>
-</div>
-
-<script>
-let teams = [
-  { name: "Geberit", roster: [], captain: "", total: 0 },
-  { name: "Ghigliottina", roster: [], captain: "", total: 0 },
-  { name: "Mud Max", roster: [], captain: "", total: 0 },
-  { name: "Sunday Bini", roster: [], captain: "", total: 0 },
-  { name: "OpenAI Collective", roster: [], captain: "", total: 0 },
-  { name: "Bradbury", roster: [], captain: "", total: 0 },
-  { name: "Branca Menta", roster: [], captain: "", total: 0 },
-  { name: "Eclissi", roster: [], captain: "", total: 0 },
-  { name: "I gasati", roster: [], captain: "", total: 0 },
-  { name: "Tempo Libero: Rolex", roster: [], captain: "", total: 0 }
-];
-
-function render() {
-  const container = document.getElementById("teams");
-  container.innerHTML = "";
-
-  teams.forEach((team, i) => {
-    container.innerHTML += `
-      <div class="border rounded-xl p-4 mb-3 bg-zinc-50">
-        <div class="font-bold">${team.name}</div>
-        <input class="w-full border rounded p-2 mt-2"
-          placeholder="Roster (uno per riga)"
-          onchange="updateRoster(${i}, this.value)"
-          value="${team.roster.join("\n")}">
-        <input class="w-full border rounded p-2 mt-2"
-          placeholder="Capitano"
-          onchange="updateCaptain(${i}, this.value)"
-          value="${team.captain}">
-      </div>
-    `;
-  });
-}
-
-function updateRoster(i, value) {
-  let list = value.split("\n").map(x => x.trim()).filter(x => x);
-  if (hasDuplicates(i, list)) {
-    alert("❌ Artista già presente in un'altra squadra!");
-    return;
-  }
-  teams[i].roster = list;
-}
-
-function updateCaptain(i, value) {
-  teams[i].captain = value.trim();
-}
-
-function hasDuplicates(currentIndex, newRoster) {
-  for (let j = 0; j < teams.length; j++) {
-    if (j === currentIndex) continue;
-    for (let artist of newRoster) {
-      if (teams[j].roster.includes(artist)) {
-        return true;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>SVT Official FantaSanremo — Glitter Pop</title>
+    <style>
+      :root{
+        --bgA:#0b0016;
+        --bgB:#13002a;
+        --card: rgba(255,255,255,.08);
+        --card2: rgba(255,255,255,.12);
+        --line: rgba(255,255,255,.16);
+        --ink: rgba(255,255,255,.92);
+        --muted: rgba(255,255,255,.65);
+        --pink:#ff4fd8;
+        --violet:#7c3aed;
+        --cyan:#22d3ee;
+        --gold:#ffd36e;
+        --shadow: 0 18px 60px rgba(0,0,0,.35);
+        --r: 26px;
       }
-    }
-  }
-  return false;
-}
+      *{box-sizing:border-box}
+      body{
+        margin:0;
+        color: var(--ink);
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+        background:
+          radial-gradient(1200px 600px at 20% 10%, rgba(255,79,216,.25), transparent 60%),
+          radial-gradient(1000px 600px at 80% 20%, rgba(34,211,238,.18), transparent 60%),
+          radial-gradient(900px 700px at 50% 90%, rgba(124,58,237,.20), transparent 60%),
+          linear-gradient(180deg, var(--bgA), var(--bgB));
+        overflow-x:hidden;
+      }
+      .sparkle{
+        position:fixed; inset:0; pointer-events:none; opacity:.35;
+        background-image:
+          radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.9) 40%, transparent 45%),
+          radial-gradient(1.5px 1.5px at 70% 18%, rgba(255,255,255,.8) 40%, transparent 45%),
+          radial-gradient(1.5px 1.5px at 35% 75%, rgba(255,255,255,.7) 40%, transparent 45%),
+          radial-gradient(2px 2px at 85% 65%, rgba(255,255,255,.75) 40%, transparent 45%),
+          radial-gradient(1.2px 1.2px at 55% 45%, rgba(255,255,255,.6) 40%, transparent 45%);
+        filter: blur(.2px);
+        animation: tw 6s ease-in-out infinite alternate;
+      }
+      @keyframes tw{ from{opacity:.25} to{opacity:.45} }
 
-function applyPoints() {
-  let text = document.getElementById("bulkInput").value;
-  let lines = text.split("\n");
-  let points = {};
+      .wrap{max-width:1150px; margin:0 auto; padding:26px 16px 70px;}
+      .top{
+        display:flex; gap:12px; flex-wrap:wrap;
+        align-items:flex-end; justify-content:space-between;
+        margin-bottom:16px;
+      }
+      .brand{
+        display:flex; flex-direction:column; gap:10px;
+      }
+      .badge{
+        display:inline-flex; align-items:center; gap:10px;
+        padding:8px 12px; border-radius:999px;
+        border:1px solid var(--line);
+        background: linear-gradient(135deg, rgba(255,79,216,.18), rgba(34,211,238,.12));
+        box-shadow: 0 10px 30px rgba(255,79,216,.08);
+        font-size:12px; font-weight:900; letter-spacing:.03em;
+      }
+      .h1{
+        font-size:34px; font-weight:950; letter-spacing:-.03em;
+        margin:0;
+        background: linear-gradient(90deg, #fff, rgba(255,79,216,.95), rgba(34,211,238,.95), #fff);
+        -webkit-background-clip:text; background-clip:text; color:transparent;
+        text-shadow: 0 0 30px rgba(255,79,216,.08);
+      }
+      .sub{
+        color: var(--muted);
+        font-size:13px;
+        margin-top:4px;
+      }
+      .pills{display:flex; gap:8px; flex-wrap:wrap}
+      .pill{
+        display:inline-flex; align-items:center; gap:8px;
+        padding:8px 12px; border-radius:999px;
+        border:1px solid var(--line);
+        background: rgba(255,255,255,.06);
+        font-size:12px; font-weight:850; color: rgba(255,255,255,.82);
+      }
+      .actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;}
+      .btn{
+        padding:10px 14px;
+        border-radius:18px;
+        border:1px solid var(--line);
+        background: rgba(255,255,255,.06);
+        color: var(--ink);
+        font-weight:900;
+        cursor:pointer;
+        box-shadow: 0 10px 28px rgba(0,0,0,.18);
+        transition: transform .08s ease, background .18s ease, border-color .18s ease;
+      }
+      .btn:hover{ background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.22) }
+      .btn:active{ transform: scale(.98) }
+      .btn.primary{
+        border-color: rgba(255,79,216,.55);
+        background: linear-gradient(135deg, rgba(255,79,216,.22), rgba(124,58,237,.18));
+      }
+      .btn.danger{
+        border-color: rgba(255,90,90,.65);
+        background: linear-gradient(135deg, rgba(255,90,90,.22), rgba(255,79,216,.12));
+      }
 
-  lines.forEach(line => {
-    let match = line.match(/^(.*?)[=:]\s*(-?\d+)/);
-    if (match) {
-      points[match[1].trim()] = parseInt(match[2]);
-    }
-  });
+      .banner{
+        border-radius: var(--r);
+        padding:14px 16px;
+        border:1px solid rgba(255,90,90,.35);
+        background: rgba(255,90,90,.10);
+        color: rgba(255,220,220,.95);
+        box-shadow: var(--shadow);
+        margin: 14px 0 16px;
+      }
 
-  teams.forEach(team => {
-    let sum = 0;
-    team.roster.forEach(artist => {
-      let val = points[artist] || 0;
-      sum += val;
-      if (artist === team.captain) sum += val; // Capitano x2
-    });
-    team.total = sum;
-  });
+      .tabs{display:flex; gap:10px; flex-wrap:wrap; margin: 16px 0}
+      .tab{
+        padding:10px 14px;
+        border-radius:18px;
+        border:1px solid var(--line);
+        background: rgba(255,255,255,.06);
+        font-weight:950;
+        cursor:pointer;
+        transition: background .18s ease;
+      }
+      .tab.active{
+        background: linear-gradient(135deg, rgba(34,211,238,.22), rgba(255,79,216,.22));
+        border-color: rgba(255,255,255,.25);
+      }
 
-  renderStandings();
-}
+      .grid{display:grid; gap:16px}
+      @media(min-width:980px){ .cols2{grid-template-columns: 1.15fr .85fr} }
+      .card{
+        background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+        border:1px solid var(--line);
+        border-radius: var(--r);
+        padding:18px;
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(10px);
+      }
+      .title{display:flex; align-items:center; gap:10px; margin-bottom:12px}
+      .ibox{
+        width:36px; height:36px; border-radius:16px;
+        display:flex; align-items:center; justify-content:center;
+        font-weight:950;
+        background: linear-gradient(135deg, rgba(255,79,216,.35), rgba(34,211,238,.28));
+        border:1px solid rgba(255,255,255,.22);
+      }
+      .t1{font-size:18px; font-weight:950; letter-spacing:-.01em}
+      .t2{font-size:13px; color:var(--muted); margin-top:2px}
 
-function renderStandings() {
-  let sorted = [...teams].sort((a,b)=>b.total-a.total);
-  const container = document.getElementById("standings");
-  container.innerHTML = "";
+      .rankRow{
+        display:flex; align-items:center; justify-content:space-between; gap:10px;
+        padding:12px;
+        border:1px solid rgba(255,255,255,.14);
+        background: rgba(0,0,0,.14);
+        border-radius: 18px;
+      }
+      .teamLeft{display:flex; align-items:center; gap:10px}
+      .teamIcon{
+        width:44px; height:44px; border-radius:18px;
+        display:flex; align-items:center; justify-content:center;
+        background: rgba(255,255,255,.08);
+        border:1px solid rgba(255,255,255,.16);
+        font-size:20px;
+      }
+      .small{font-size:12px; color:var(--muted)}
+      .big{font-size:20px; font-weight:950}
 
-  sorted.forEach((team, i) => {
-    container.innerHTML += `
-      <div class="flex justify-between border rounded-xl p-3 bg-white mb-2">
-        <div>#${i+1} ${team.name}</div>
-        <div class="font-bold">${team.total}</div>
-      </div>
-    `;
-  });
-}
+      .input, textarea{
+        width:100%;
+        padding:10px 12px;
+        border-radius:16px;
+        border:1px solid rgba(255,255,255,.18);
+        background: rgba(0,0,0,.18);
+        color: var(--ink);
+        outline:none;
+      }
+      textarea{min-height:96px; resize:vertical}
+      .input:focus, textarea:focus{
+        border-color: rgba(34,211,238,.40);
+        box-shadow: 0 0 0 3px rgba(34,211,238,.12);
+      }
+      .nightBtns{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+      .nightBtn{
+        padding:8px 10px; border-radius:16px;
+        border:1px solid rgba(255,255,255,.16);
+        background: rgba(0,0,0,.14);
+        color: var(--ink);
+        font-weight:900; cursor:pointer;
+      }
+      .nightBtn.active{
+        background: linear-gradient(135deg, rgba(255,79,216,.22), rgba(34,211,238,.18));
+        border-color: rgba(255,255,255,.25);
+      }
+      .mutebox{
+        padding:12px; border-radius:18px;
+        border:1px solid rgba(255,255,255,.14);
+        background: rgba(0,0,0,.14);
+        color: var(--muted);
+        font-size:13px;
+      }
+      .footer{
+        margin-top:18px; text-align:center; font-size:12px; color: rgba(255,255,255,.55)
+      }
+      .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+    </style>
+  </head>
 
-function addTeam() {
-  let name = prompt("Nome squadra?");
-  if (!name) return;
-  teams.push({ name, roster: [], captain: "", total: 0 });
-  render();
-}
+  <body>
+    <div class="sparkle"></div>
+    <div id="app"></div>
 
-render();
-</script>
+    <script type="module">
+      import { h, render } from "https://esm.sh/preact@10.19.6";
+      import { useEffect, useMemo, useState } from "https://esm.sh/preact@10.19.6/hooks";
+      import htm from "https://esm.sh/htm@3.1.1";
+      const html = htm.bind(h);
 
-</body>
+      const STORAGE_KEY = "svt_fanta_glitter_v1";
+
+      const uid = (p="id") => \`\${p}_\${Math.random().toString(16).slice(2)}_\${Date.now().toString(16)}\`;
+      const clamp = (x) => (Number.isFinite(Number(x)) ? Number(x) : 0);
+
+      // Normalizzazione: aiuta con spazi e maiuscole/minuscole
+      const norm = (s) => String(s||"").trim().replace(/\\s+/g," ").toLowerCase();
+
+      const NIGHTS = [
+        { id: "n1", label: "Serata 1" },
+        { id: "n2", label: "Serata 2" },
+        { id: "n3", label: "Serata 3" },
+        { id: "n4", label: "Serata 4" },
+        { id: "n5", label: "Finale" },
+      ];
+
+      // ✅ SQUADRE PRECOMPILATE (capitani MAIUSCOLI)
+      const PRESET_TEAMS = [
+        { name: "Geberit", icon: "🚽", captain: "DARGEN D’AMICO", roster: ["DARGEN D’AMICO","Malika Ayane","lda & Aka7"] },
+        { name: "Ghigliottina", icon: "🪓", captain: "MARIA ANTONIETTA & COLOMBRE", roster: ["MARIA ANTONIETTA & COLOMBRE","Tredici Pietro","Levante"] },
+        { name: "Mud Max", icon: "🏜️", captain: "SAYF", roster: ["SAYF","Mara Sattei","Ditonellapiaga"] },
+        { name: "Sunday Bini", icon: "🍹", captain: "SAL DA VINCI", roster: ["SAL DA VINCI","Samurai Jack","Eddie Brock"] },
+        { name: "OpenAi Collective", icon: "🤖", captain: "FEDEZ & MASINI", roster: ["FEDEZ & MASINI","Ermal Meta","Fulminacci"] },
+        { name: "Bradbury", icon: "📚", captain: "TOMMASO PARADISO", roster: ["TOMMASO PARADISO","Patty Pravo","Bambole di pezza"] },
+        { name: "Branca Menta", icon: "🍃", captain: "SERENA BRANCALE", roster: ["SERENA BRANCALE","Nayf","Michele Bravi"] },
+        { name: "Eclissi", icon: "🌑", captain: "ARISA", roster: ["ARISA","Chiello","Elettra Lamborghini"] },
+        { name: "I Gasati", icon: "⛽", captain: "LEO GASSMAN", roster: ["LEO GASSMAN","Raf","Jax"] },
+        { name: "Tempo Libero: Rolex", icon: "⌚", captain: "FRANCESCO RENGA", roster: ["FRANCESCO RENGA","Luché","Enrico Nigiotti"] },
+      ];
+
+      const HOMERULES = [
+        { id:"excl", title:"Esclusività artista", desc:"Ogni cantante può appartenere a una sola squadra (bloccante)." },
+        { id:"cap2", title:"Capitano x2", desc:"Il Capitano vale doppio sui punti della serata (automatico)." }
+      ];
+
+      function findRosterDuplicates(teams){
+        const seen = new Map(); // normName -> {display, teams[]}
+        for(const t of teams){
+          for(const raw of (t.roster||[])){
+            const key = norm(raw);
+            if(!key) continue;
+            const entry = seen.get(key) || { display: String(raw).trim(), teams: [] };
+            if(!entry.teams.includes(t.name)) entry.teams.push(t.name);
+            // preserva la prima “grafia”
+            if(!entry.display) entry.display = String(raw).trim();
+            seen.set(key, entry);
+          }
+        }
+        const dupMap = {};
+        for(const [k,v] of seen.entries()){
+          if(v.teams.length>1) dupMap[k]=v;
+        }
+        return dupMap;
+      }
+
+      // Lookup punti “tollerante”: prova match esatto, poi normalizzato
+      function getPoints(pointsMap, artist){
+        if(pointsMap[artist] != null) return clamp(pointsMap[artist]);
+        const key = norm(artist);
+        if(!key) return 0;
+        // costruisci indice normalizzato al volo (pochi artisti, va benissimo)
+        for(const [k,v] of Object.entries(pointsMap)){
+          if(norm(k)===key) return clamp(v);
+        }
+        return 0;
+      }
+
+      function computeTeamNight({team, artistPoints, extra=0}){
+        let sum = 0;
+        for(const a of (team.roster||[])) sum += getPoints(artistPoints, a);
+        const capPts = getPoints(artistPoints, team.captain);
+        // Captain x2 => aggiungo un'altra volta i punti del capitano
+        sum += capPts;
+        sum += clamp(extra);
+        return Math.round(sum*10)/10;
+      }
+
+      function exportJSON(data){
+        const blob = new Blob([JSON.stringify(data,null,2)], {type:"application/json"});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = \`svt-fanta-\${new Date().toISOString().slice(0,10)}.json\`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      function importJSON(setData){
+        const input = document.createElement("input");
+        input.type="file";
+        input.accept="application/json";
+        input.onchange = async (e)=>{
+          const file = e.target.files?.[0];
+          if(!file) return;
+          const text = await file.text();
+          setData(JSON.parse(text));
+        };
+        input.click();
+      }
+
+      function App(){
+        const initial = {
+          leagueName: "SVT Official FantaSanremo",
+          teams: PRESET_TEAMS.map(t=>({ id:uid("team"), name:t.name, icon:t.icon, roster:t.roster, captain:t.captain })),
+          nights: NIGHTS,
+          homerules: HOMERULES,
+          nightData: NIGHTS.reduce((acc,n)=>{
+            acc[n.id] = { mode:"byArtist", artistPoints:{}, teamManualTotals:{}, extra:{} };
+            return acc;
+          },{})
+        };
+
+        const [data,setData] = useState(()=>{
+          try{
+            const raw = localStorage.getItem(STORAGE_KEY);
+            return raw ? JSON.parse(raw) : initial;
+          }catch{ return initial; }
+        });
+
+        useEffect(()=>{ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }, [data]);
+
+        const [tab,setTab] = useState("classifica");
+        const [nightId,setNightId] = useState(NIGHTS[0].id);
+        const [dupError,setDupError] = useState("");
+
+        const night = data.nightData[nightId];
+
+        const standings = useMemo(()=>{
+          const rows = data.teams.map(team=>{
+            let total=0;
+            for(const n of data.nights){
+              const nd = data.nightData[n.id];
+              const extra = clamp(nd.extra?.[team.id] ?? 0);
+              if(nd.mode==="manual"){
+                total += clamp(nd.teamManualTotals?.[team.id] ?? 0) + extra;
+              } else {
+                total += computeTeamNight({team, artistPoints: nd.artistPoints, extra});
+              }
+            }
+            return {team, total: Math.round(total*10)/10};
+          });
+          rows.sort((a,b)=>b.total-a.total);
+          return rows;
+        }, [data]);
+
+        const nightStandings = useMemo(()=>{
+          const rows = data.teams.map(team=>{
+            const extra = clamp(night.extra?.[team.id] ?? 0);
+            const total = night.mode==="manual"
+              ? clamp(night.teamManualTotals?.[team.id] ?? 0) + extra
+              : computeTeamNight({team, artistPoints: night.artistPoints, extra});
+            return {team, total: Math.round(total*10)/10};
+          });
+          rows.sort((a,b)=>b.total-a.total);
+          return rows;
+        }, [data, nightId]);
+
+        function updateTeam(teamId, patch){
+          setData(d=>{
+            const nextTeams = d.teams.map(t=> t.id===teamId ? {...t, ...patch} : t);
+            const dupMap = findRosterDuplicates(nextTeams);
+            const keys = Object.keys(dupMap);
+            if(keys.length){
+              const preview = keys.slice(0,3).map(k=>\`\${dupMap[k].display} (\${dupMap[k].teams.join(" / ")})\`).join(" · ");
+              setDupError(\`Regola ESCLUSIVITÀ: doppioni trovati. Risolvi prima di salvare. Esempio: \${preview}\${keys.length>3?" …":""}\`);
+              return d; // BLOCCA
+            }
+            setDupError("");
+            return {...d, teams: nextTeams};
+          });
+        }
+
+        function setNightMode(mode){
+          setData(d=>({...d, nightData:{...d.nightData, [nightId]:{...d.nightData[nightId], mode}}}));
+        }
+
+        function parseBulk(text){
+          const lines = text.split(/\\n+/).map(s=>s.trim()).filter(Boolean);
+          const entries = [];
+          for(const line of lines){
+            const m = line.match(/^(.*?)(?:\\s*[=:]\\s*|\\s+)(-?\\d+(?:\\.\\d+)?)$/);
+            if(!m) continue;
+            entries.push([m[1].trim(), clamp(m[2])]);
+          }
+          if(!entries.length) return;
+          setData(d=>{
+            const cur = d.nightData[nightId].artistPoints;
+            const next = {...cur};
+            for(const [a,p] of entries) next[a]=p;
+            return {...d, nightData:{...d.nightData, [nightId]:{...d.nightData[nightId], artistPoints: next}}};
+          });
+        }
+
+        function resetAll(){
+          if(!confirm("Reset totale? Cancella dati salvati in questo browser.")) return;
+          localStorage.removeItem(STORAGE_KEY);
+          setDupError("");
+          setData(initial);
+          setNightId(NIGHTS[0].id);
+          setTab("classifica");
+        }
+
+        return html`
+          <div class="wrap">
+            <div class="top">
+              <div class="brand">
+                <div class="badge">✨ SVT League App • SANREMO GLITTER POP</div>
+                <h1 class="h1">${data.leagueName}</h1>
+                <div class="sub">Homerules: esclusività artista (bloccante) + Capitano x2 (automatico) • Condivisione: Export/Import (no login)</div>
+                <div class="pills">
+                  <div class="pill">👥 ${data.teams.length} squadre</div>
+                  <div class="pill">📅 ${data.nights.length} serate</div>
+                  <div class="pill">👑 Cap x2</div>
+                  <div class="pill">🧷 Esclusività</div>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn primary" onClick=${()=>exportJSON(data)}>⬇️ Export</button>
+                <button class="btn" onClick=${()=>importJSON(setData)}>⬆️ Import</button>
+                <button class="btn danger" onClick=${resetAll}>🗑️ Reset</button>
+              </div>
+            </div>
+
+            ${dupError ? html`
+              <div class="banner">
+                <div style="font-weight:950">Bloccato</div>
+                <div style="margin-top:4px">${dupError}</div>
+              </div>
+            `: null}
+
+            <div class="tabs">
+              <button class=${"tab "+(tab==="classifica"?"active":"")} onClick=${()=>setTab("classifica")}>🏆 Classifica</button>
+              <button class=${"tab "+(tab==="serata"?"active":"")} onClick=${()=>setTab("serata")}>📅 Serata</button>
+              <button class=${"tab "+(tab==="roster"?"active":"")} onClick=${()=>setTab("roster")}>👥 Roster</button>
+              <button class=${"tab "+(tab==="homerules"?"active":"")} onClick=${()=>setTab("homerules")}>✨ Homerules</button>
+            </div>
+
+            ${tab==="classifica" && html`
+              <div class="grid cols2">
+                <div class="card">
+                  <div class="title">
+                    <div class="ibox">🏆</div>
+                    <div>
+                      <div class="t1">Classifica generale</div>
+                      <div class="t2">Somma di tutte le serate (manuale o per-artista).</div>
+                    </div>
+                  </div>
+
+                  <div style="display:flex; flex-direction:column; gap:10px">
+                    ${standings.map((r,idx)=> html`
+                      <div class="rankRow">
+                        <div class="teamLeft">
+                          <div class="teamIcon">${r.team.icon}</div>
+                          <div>
+                            <div style="font-weight:950">#${idx+1} — ${r.team.name}</div>
+                            <div class="small">Cap: <span class="mono" style="font-weight:900">${r.team.captain || "—"}</span></div>
+                          </div>
+                        </div>
+                        <div class="big">${r.total}</div>
+                      </div>
+                    `)}
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div class="title">
+                    <div class="ibox">📅</div>
+                    <div>
+                      <div class="t1">Focus serata</div>
+                      <div class="t2">Mini-classifica della serata selezionata.</div>
+                    </div>
+                  </div>
+
+                  <div class="nightBtns">
+                    ${data.nights.map(n=> html`
+                      <button class=${"nightBtn "+(nightId===n.id?"active":"")} onClick=${()=>setNightId(n.id)}>${n.label}</button>
+                    `)}
+                  </div>
+
+                  <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px">
+                    ${nightStandings.slice(0,6).map((r,idx)=> html`
+                      <div class="rankRow" style="padding:10px 12px">
+                        <div class="teamLeft" style="gap:8px">
+                          <div style="width:26px; font-weight:950">#${idx+1}</div>
+                          <div style="font-size:18px">${r.team.icon}</div>
+                          <div style="font-weight:900">${r.team.name}</div>
+                        </div>
+                        <div style="font-weight:950">${r.total}</div>
+                      </div>
+                    `)}
+                  </div>
+
+                  <div class="mutebox" style="margin-top:12px">
+                    Modalità serata: <b>${night.mode==="manual" ? "Manuale" : "Per artista"}</b>
+                  </div>
+                </div>
+              </div>
+            `}
+
+            ${tab==="serata" && html`
+              <div class="grid cols2">
+                <div class="card">
+                  <div class="title">
+                    <div class="ibox">📅</div>
+                    <div>
+                      <div class="t1">Punteggi serata</div>
+                      <div class="t2">Incolla punti per artista oppure inserisci i totali.</div>
+                    </div>
+                  </div>
+
+                  <div class="nightBtns">
+                    ${data.nights.map(n=> html`
+                      <button class=${"nightBtn "+(nightId===n.id?"active":"")} onClick=${()=>setNightId(n.id)}>${n.label}</button>
+                    `)}
+                  </div>
+
+                  <div style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap">
+                    <button class=${"btn "+(night.mode==="byArtist"?"primary":"")} onClick=${()=>setNightMode("byArtist")}>✅ Per artista</button>
+                    <button class=${"btn "+(night.mode==="manual"?"primary":"")} onClick=${()=>setNightMode("manual")}>🧾 Manuale</button>
+                  </div>
+
+                  ${night.mode==="byArtist" ? html`
+                    <div style="margin-top:14px" class="mutebox">
+                      Incolla qui sotto: <span class="mono"><b>Artista = 12</b></span> (una riga per artista).<br/>
+                      Suggerimento: copia i nomi dagli stessi roster per evitare refusi.
+                    </div>
+
+                    <div style="margin-top:12px">
+                      <textarea id="bulk" placeholder="Esempio:
+ARISA = 14
+Raf: 7
+Enrico Nigiotti -5"></textarea>
+                      <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap">
+                        <button class="btn primary" onClick=${()=>{
+                          const t = document.getElementById("bulk").value;
+                          parseBulk(t);
+                          document.getElementById("bulk").value="";
+                        }}>✨ Importa righe</button>
+                      </div>
+                    </div>
+
+                    <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px">
+                      ${Object.keys(night.artistPoints||{}).length===0 ? html`
+                        <div class="mutebox">Nessun artista inserito ancora.</div>
+                      `: null}
+
+                      ${Object.entries(night.artistPoints||{})
+                        .sort((a,b)=>a[0].localeCompare(b[0]))
+                        .map(([artist,pts])=> html`
+                          <div class="rankRow">
+                            <div style="font-weight:900">${artist}</div>
+                            <div style="display:flex; gap:8px; align-items:center">
+                              <input class="input" style="width:140px" type="number" value=${pts}
+                                onInput=${(e)=> setData(d=>({...d, nightData:{...d.nightData, [nightId]:{...d.nightData[nightId], artistPoints:{...d.nightData[nightId].artistPoints, [artist]: clamp(e.target.value)}}}}))}
+                              />
+                              <button class="btn" onClick=${()=> setData(d=>{
+                                const ap = {...d.nightData[nightId].artistPoints};
+                                delete ap[artist];
+                                return {...d, nightData:{...d.nightData, [nightId]:{...d.nightData[nightId], artistPoints: ap}}};
+                              })}>🗑️</button>
+                            </div>
+                          </div>
+                        `)}
+                    </div>
+                  ` : html`
+                    <div class="mutebox" style="margin-top:14px">
+                      Modalità manuale: inserisci solo il totale per squadra (capitano x2 già “dentro” quel totale se lo calcolate voi).
+                    </div>
+
+                    <div style="margin-top:14px; display:flex; flex-direction:column; gap:10px">
+                      ${data.teams.map(t=> html`
+                        <div class="rankRow" style="flex-direction:column; align-items:stretch; gap:10px">
+                          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px">
+                            <div class="teamLeft">
+                              <div style="font-size:18px">${t.icon}</div>
+                              <div style="font-weight:950">${t.name}</div>
+                            </div>
+                            <div style="width:170px">
+                              <input class="input" type="number" placeholder="Totale"
+                                value=${night.teamManualTotals?.[t.id] ?? ""}
+                                onInput=${(e)=> setData(d=>({...d, nightData:{...d.nightData, [nightId]:{...d.nightData[nightId], teamManualTotals:{...d.nightData[nightId].teamManualTotals, [t.id]: clamp(e.target.value)}}}}))}
+                              />
+                            </div>
+                          </div>
+
+                          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px">
+                            <div class="small">Extra manuale (opzionale)</div>
+                            <div style="width:170px">
+                              <input class="input" type="number" placeholder="0"
+                                value=${night.extra?.[t.id] ?? ""}
+                                onInput=${(e)=> setData(d=>({...d, nightData:{...d.nightData, [nightId]:{...d.nightData[nightId], extra:{...d.nightData[nightId].extra, [t.id]: clamp(e.target.value)}}}}))}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      `)}
+                    </div>
+                  `}
+                </div>
+
+                <div class="card">
+                  <div class="title">
+                    <div class="ibox">🏆</div>
+                    <div>
+                      <div class="t1">Classifica serata</div>
+                      <div class="t2">Calcolata in base alla modalità selezionata.</div>
+                    </div>
+                  </div>
+
+                  <div style="display:flex; flex-direction:column; gap:10px">
+                    ${nightStandings.map((r,idx)=> html`
+                      <div class="rankRow">
+                        <div class="teamLeft">
+                          <div class="teamIcon">${r.team.icon}</div>
+                          <div>
+                            <div style="font-weight:950">#${idx+1} — ${r.team.name}</div>
+                            <div class="small">${night.mode==="manual" ? "Totale inserito a mano" : `Roster: ${(r.team.roster||[]).length} · Cap: ${r.team.captain||"—"}`}</div>
+                          </div>
+                        </div>
+                        <div class="big">${r.total}</div>
+                      </div>
+                    `)}
+                  </div>
+
+                  <div class="mutebox" style="margin-top:12px">
+                    <b>Tip da festival:</b> per evitare mismatch nei nomi, quando inserisci i punti copia i nomi dai roster (o usa maiuscole/minuscole come vuoi: il match è “tollerante”).
+                  </div>
+                </div>
+              </div>
+            `}
+
+            ${tab==="roster" && html`
+              <div class="grid cols2">
+                <div class="card">
+                  <div class="title">
+                    <div class="ibox">👥</div>
+                    <div>
+                      <div class="t1">Roster squadre</div>
+                      <div class="t2">Già precompilate. Modifica pure: l’esclusività è bloccante.</div>
+                    </div>
+                  </div>
+
+                  <div style="display:flex; flex-direction:column; gap:12px">
+                    ${data.teams.map(t=> html`
+                      <div class="card" style="background: rgba(0,0,0,.14); border-color: rgba(255,255,255,.14)">
+                        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px">
+                          <div class="teamLeft">
+                            <div class="teamIcon">${t.icon}</div>
+                            <div>
+                              <div style="font-weight:950">${t.name}</div>
+                              <div class="small">Artisti in roster: ${(t.roster||[]).length}</div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div style="margin-top:12px">
+                          <div class="small" style="font-weight:900; margin-bottom:6px">Capitano (x2)</div>
+                          <input class="input" placeholder="Nome artista"
+                            value=${t.captain || ""}
+                            onInput=${(e)=> updateTeam(t.id, {captain: e.target.value})}
+                          />
+                        </div>
+
+                        <div style="margin-top:12px">
+                          <div class="small" style="font-weight:900; margin-bottom:6px">Roster (uno per riga)</div>
+                          <textarea class="input"
+                            value=${(t.roster||[]).join("\\n")}
+                            onInput=${(e)=> updateTeam(t.id, { roster: e.target.value.split(/\\n+/).map(x=>x.trim()).filter(Boolean) })}
+                          ></textarea>
+                        </div>
+
+                        <div class="pills" style="margin-top:10px">
+                          <div class="pill">👑 Cap x2</div>
+                          <div class="pill">🧷 Esclusività</div>
+                        </div>
+                      </div>
+                    `)}
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div class="title">
+                    <div class="ibox">📌</div>
+                    <div>
+                      <div class="t1">Condivisione nel gruppo</div>
+                      <div class="t2">Zero login: usate Export/Import.</div>
+                    </div>
+                  </div>
+
+                  <div class="mutebox">
+                    <b>Flusso perfetto:</b><br/>
+                    • 1 admin inserisce punti/roster<br/>
+                    • fa <b>Export</b> e manda il file nel gruppo<br/>
+                    • gli altri fanno <b>Import</b> e vedono la stessa classifica.
+                  </div>
+
+                  <div class="mutebox" style="margin-top:12px">
+                    <b>Nota capitano:</b> se il capitano non è tra i punti incollati, prenderà 0 (come gli altri non inseriti).
+                  </div>
+                </div>
+              </div>
+            `}
+
+            ${tab==="homerules" && html`
+              <div class="grid cols2">
+                <div class="card">
+                  <div class="title">
+                    <div class="ibox">✨</div>
+                    <div>
+                      <div class="t1">Homerules SVT</div>
+                      <div class="t2">Solo 2 regole, semplici e cattive.</div>
+                    </div>
+                  </div>
+
+                  <div style="display:flex; flex-direction:column; gap:10px">
+                    ${data.homerules.map(r=> html`
+                      <div class="rankRow">
+                        <div>
+                          <div style="font-weight:950">${r.title}</div>
+                          <div class="small">${r.desc}</div>
+                        </div>
+                        <div style="font-weight:950">OK</div>
+                      </div>
+                    `)}
+                  </div>
+
+                  <div class="mutebox" style="margin-top:12px">
+                    Esclusività è <b>bloccante</b>: se provi a duplicare un artista, non salva.
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div class="title">
+                    <div class="ibox">💾</div>
+                    <div>
+                      <div class="t1">Dati salvati</div>
+                      <div class="t2">Nel browser (locale). Export consigliato.</div>
+                    </div>
+                  </div>
+
+                  <div class="mutebox">
+                    Se cambi telefono o browser, fai <b>Export</b> prima, poi <b>Import</b> sul nuovo dispositivo.
+                  </div>
+                </div>
+              </div>
+            `}
+
+            <div class="footer">
+              SVT Official FantaSanremo — Glitter Pop • no install • no login • export/import per sincronizzare
+            </div>
+          </div>
+        `;
+      }
+
+      render(h(App), document.getElementById("app"));
+    </script>
+  </body>
 </html>
