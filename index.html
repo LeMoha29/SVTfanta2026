@@ -10,7 +10,6 @@
       --bgA:#0b0016;
       --bgB:#13002a;
       --card: rgba(255,255,255,.10);
-      --card2: rgba(255,255,255,.14);
       --line: rgba(255,255,255,.16);
       --ink: rgba(255,255,255,.93);
       --muted: rgba(255,255,255,.65);
@@ -68,8 +67,8 @@
       -webkit-background-clip:text; background-clip:text; color:transparent;
       text-shadow: 0 0 30px rgba(255,79,216,.08);
     }
-    .sub{color: var(--muted); font-size:13px; margin-top:4px; max-width: 70ch;}
-    .pills{display:flex; gap:8px; flex-wrap:wrap}
+    .sub{color: var(--muted); font-size:13px; margin-top:4px; max-width: 80ch;}
+    .kpi{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;}
     .pill{
       display:inline-flex; align-items:center; gap:8px;
       padding:8px 12px; border-radius:999px;
@@ -77,6 +76,7 @@
       background: rgba(255,255,255,.06);
       font-size:12px; font-weight:850; color: rgba(255,255,255,.82);
     }
+
     .actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;}
     .btn{
       padding:10px 14px;
@@ -100,7 +100,6 @@
       border-color: rgba(255,90,90,.65);
       background: linear-gradient(135deg, rgba(255,90,90,.22), rgba(255,79,216,.12));
     }
-    .btn.ghost{ background: transparent; box-shadow:none; }
 
     .banner{
       border-radius: var(--r);
@@ -170,6 +169,7 @@
     }
     .small{font-size:12px; color:var(--muted)}
     .big{font-size:20px; font-weight:950}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
 
     /* Podio animato */
     .podium-1::before, .podium-2::before, .podium-3::before{
@@ -177,7 +177,6 @@
       position:absolute; inset:-2px;
       border-radius: 20px;
       opacity:.45;
-      filter: blur(0px);
       pointer-events:none;
     }
     .podium-1{
@@ -212,7 +211,7 @@
     @keyframes glow2{ from{transform:translateY(0)} to{transform:translateY(-1px)} }
     @keyframes glow3{ from{transform:translateY(0)} to{transform:translateY(-1px)} }
 
-    /* Animazione cambio classifica */
+    /* Animazione cambio classifica (bump top3) */
     .bump{ animation: bump .38s ease-out; }
     @keyframes bump{ 0%{transform:translateY(8px);opacity:.65} 100%{transform:translateY(0);opacity:1} }
 
@@ -228,6 +227,24 @@
       gap:8px;
       margin-left:8px;
       white-space:nowrap;
+    }
+
+    /* HOT badge */
+    .hotBadge{
+      margin-left:8px;
+      font-size:11px;
+      font-weight:950;
+      padding:6px 10px;
+      border-radius:999px;
+      background:#ff1a1a;
+      color:white;
+      animation: hotBlink 1s infinite alternate;
+      box-shadow:0 0 12px rgba(255,0,0,.7);
+      border:1px solid rgba(255,255,255,.18);
+    }
+    @keyframes hotBlink{
+      from{opacity:1; transform:scale(1)}
+      to{opacity:.6; transform:scale(1.05)}
     }
 
     .input, textarea{
@@ -272,11 +289,6 @@
     .footer{
       margin-top:18px; text-align:center; font-size:12px; color: rgba(255,255,255,.55)
     }
-    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
-
-    .kpi{
-      display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;
-    }
 
     /* Toast */
     .toast{
@@ -288,7 +300,7 @@
       border-radius: 16px;
       box-shadow: 0 18px 50px rgba(0,0,0,.35);
       backdrop-filter: blur(8px);
-      font-weight:900;
+      font-weight:950;
       opacity:0;
       pointer-events:none;
       transition: opacity .2s ease, transform .2s ease;
@@ -296,6 +308,63 @@
     .toast.show{
       opacity:1;
       transform: translateX(-50%) translateY(-6px);
+    }
+
+    /* Game overlay */
+    .gameOverlay{
+      position:fixed; inset:0; z-index:9999;
+      background: radial-gradient(900px 600px at 50% 20%, rgba(34,211,238,.12), transparent 60%),
+                  linear-gradient(180deg, #06000c, #000);
+      display:flex;
+      flex-direction:column;
+    }
+    .gameTopbar{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:12px 14px;
+      border-bottom:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.25);
+      backdrop-filter: blur(10px);
+      gap:10px;
+    }
+    .gameTitle{
+      font-weight:950;
+      letter-spacing:.02em;
+    }
+    .gameBtns{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    .gameBtn{
+      padding:10px 12px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.92);
+      font-weight:950;
+      user-select:none;
+      cursor:pointer;
+    }
+    .gameHud{
+      font-weight:950;
+      color: rgba(255,255,255,.90);
+    }
+    .gameCanvas{
+      width:100%;
+      height:100%;
+      display:block;
+    }
+    .touchPad{
+      position:fixed;
+      left:0; right:0; bottom:0;
+      display:flex;
+      justify-content:space-between;
+      padding:12px;
+      gap:12px;
+      pointer-events:auto;
+    }
+    .touchPad .gameBtn{
+      flex:1;
+      text-align:center;
+      font-size:18px;
+      padding:14px 12px;
+      background: rgba(255,255,255,.08);
     }
   </style>
 </head>
@@ -309,7 +378,7 @@
     // ==========
     // Config
     // ==========
-    const STORAGE_KEY = "svt_fanta_glitter_v2";
+    const STORAGE_KEY = "svt_fanta_glitter_v3";
 
     const NIGHTS = [
       { id: "n1", label: "Serata 1" },
@@ -333,7 +402,7 @@
     ];
 
     const HOMERULES = [
-      { id:"excl", title:"Esclusività artista", desc:"Ogni cantante può appartenere a una sola squadra (bloccante)." },
+      { id:"excl", title:"Esclusività artista", desc:"Ogni artista può appartenere a una sola squadra (bloccante)." },
       { id:"cap2", title:"Capitano x2", desc:"Il Capitano vale doppio sui punti della serata (automatico)." }
     ];
 
@@ -356,11 +425,11 @@
       try{
         const raw = localStorage.getItem(STORAGE_KEY);
         if(raw) return JSON.parse(raw);
-      }catch(e){ /* ignore */ }
+      }catch(e){}
       return null;
     }
     function safeSave(data){
-      try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }catch(e){ /* ignore */ }
+      try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }catch(e){}
     }
 
     function initialState(){
@@ -447,6 +516,7 @@
       return rows;
     }
 
+    // HOT: >=100 in una singola serata (su quella serata selezionata)
     function computeNightStandings(state, nightId){
       const nd = state.nightData[nightId];
       const rows = state.teams.map(team=>{
@@ -454,7 +524,8 @@
         const total = nd.mode==="manual"
           ? clamp(nd.teamManualTotals?.[team.id] ?? 0) + extra
           : computeTeamNight(team, nd.artistPoints, extra);
-        return { team, total: Math.round(total*10)/10 };
+
+        return { team, total: Math.round(total*10)/10, hot: total >= 100 };
       });
       rows.sort((a,b)=>b.total-a.total);
       return rows;
@@ -505,13 +576,13 @@
     }
 
     // ==========
-    // UI rendering (vanilla)
+    // UI state
     // ==========
     let state = safeLoad() || initialState();
     let tab = "classifica";
     let nightId = NIGHTS[0].id;
     let dupError = "";
-    let lastTopKey = ""; // per animazioni
+    let lastTopKey = "";
 
     function podiumClass(idx){
       if(idx===0) return "podium-1";
@@ -526,34 +597,34 @@
       return "";
     }
 
+    // ==========
+    // Render
+    // ==========
     function renderApp(){
       const root = document.getElementById("app");
 
       const standings = computeStandings(state);
       const nightStandings = computeNightStandings(state, nightId);
 
-      // Animazione: se cambia il podio generale, bump sui top3
+      // bump top3 quando cambia il podio generale
       const newTopKey = standings.slice(0,3).map(r=>r.team.id).join("|");
       const podiumChanged = (newTopKey && newTopKey !== lastTopKey);
       lastTopKey = newTopKey;
-
-      const pillsHtml = `
-        <div class="kpi">
-          <div class="pill">👥 ${state.teams.length} squadre</div>
-          <div class="pill">📅 ${state.nights.length} serate</div>
-          <div class="pill">👑 Cap x2</div>
-          <div class="pill">🧷 Esclusività</div>
-        </div>
-      `;
 
       root.innerHTML = `
         <div class="wrap">
           <div class="top">
             <div class="brand">
-              <div class="badge">✨ SVT League App • SANREMO GLITTER POP • (vanilla, ultra-stabile)</div>
+              <div class="badge">✨ SVT League App • SANREMO GLITTER POP • (ultra-stabile, zero librerie)</div>
               <h1 class="h1">${escapeHtml(state.leagueName)}</h1>
-              <div class="sub">Homerules: esclusività artista (bloccante) + Capitano x2 (automatico) • Condivisione: Export/Import (no login)</div>
-              ${pillsHtml}
+              <div class="sub">Homerules: esclusività artista (bloccante) + Capitano x2 (automatico) • Condivisione: Export/Import (no login) • Easter egg: triplo tap su “Ghigliottina” 🪓</div>
+              <div class="kpi">
+                <div class="pill">👥 ${state.teams.length} squadre</div>
+                <div class="pill">📅 ${state.nights.length} serate</div>
+                <div class="pill">👑 Cap x2</div>
+                <div class="pill">🧷 Esclusività</div>
+                <div class="pill">🔥 HOT: ≥ 100/serata</div>
+              </div>
             </div>
             <div class="actions">
               <button class="btn primary" id="btnExport">⬇️ Export</button>
@@ -585,11 +656,12 @@
         </div>
       `;
 
-      // Wiring
+      // Tabs
       document.querySelectorAll(".tab").forEach(b=>{
         b.addEventListener("click", ()=>{ tab = b.dataset.tab; renderApp(); });
       });
 
+      // Actions
       document.getElementById("btnExport").addEventListener("click", ()=> exportJSON(state));
       document.getElementById("btnImport").addEventListener("click", ()=> importJSON((p)=>{ state = p; safeSave(state); dupError=""; renderApp(); }));
       document.getElementById("btnReset").addEventListener("click", ()=>{
@@ -603,7 +675,7 @@
         renderApp();
       });
 
-      // Night buttons
+      // Night selection
       document.querySelectorAll("[data-night]").forEach(b=>{
         b.addEventListener("click", ()=>{
           nightId = b.dataset.night;
@@ -620,7 +692,7 @@
         });
       });
 
-      // Serata handlers
+      // Bulk import points
       const bulkBtn = document.getElementById("bulkImport");
       if(bulkBtn){
         bulkBtn.addEventListener("click", ()=>{
@@ -634,13 +706,12 @@
         });
       }
 
-      // Edit punti singoli
+      // Edit single artist points + delete
       document.querySelectorAll("[data-artist]").forEach(inp=>{
         inp.addEventListener("input", ()=>{
           const artist = inp.dataset.artist;
           state.nightData[nightId].artistPoints[artist] = clamp(inp.value);
           safeSave(state);
-          // non rerender ad ogni battito (ma ok). Rerender leggero:
           renderApp();
         });
       });
@@ -671,7 +742,7 @@
         });
       });
 
-      // Roster editing + captain
+      // Captain + roster editing (exclusivity blocking)
       document.querySelectorAll("[data-cap]").forEach(inp=>{
         inp.addEventListener("input", ()=>{
           const teamId = inp.dataset.cap;
@@ -679,7 +750,6 @@
           const dups = findRosterDuplicates(nextTeams);
           if(Object.keys(dups).length){
             dupError = formatDupError(dups);
-            // blocca
             toast("Doppione artista: bloccato");
             renderApp();
             return;
@@ -724,20 +794,22 @@
               <div class="ibox">🏆</div>
               <div>
                 <div class="t1">Classifica generale</div>
-                <div class="t2">Somma di tutte le serate (manuale o per-artista). Podio animato ✨</div>
+                <div class="t2">Somma di tutte le serate. Podio animato ✨</div>
               </div>
             </div>
 
             <div style="display:flex; flex-direction:column; gap:10px">
               ${standings.map((r,idx)=>{
-                const podium = podiumClass(idx);
                 const bump = podiumChanged && idx<3 ? "bump" : "";
                 return `
-                  <div class="rankRow ${podium} ${bump}">
+                  <div class="rankRow ${podiumClass(idx)} ${bump}" data-teamrow="1" data-teamname="${escapeAttr(r.team.name)}">
                     <div class="teamLeft">
                       <div class="teamIcon">${escapeHtml(r.team.icon)}</div>
                       <div>
-                        <div style="font-weight:950">#${idx+1} — ${escapeHtml(r.team.name)} ${medalBadge(idx)}</div>
+                        <div style="font-weight:950">
+                          #${idx+1} — ${escapeHtml(r.team.name)}
+                          ${medalBadge(idx)}
+                        </div>
                         <div class="small">Cap: <span class="mono" style="font-weight:900">${escapeHtml(r.team.captain||"—")}</span></div>
                       </div>
                     </div>
@@ -753,7 +825,7 @@
               <div class="ibox">📅</div>
               <div>
                 <div class="t1">Focus serata</div>
-                <div class="t2">Mini-classifica della serata selezionata.</div>
+                <div class="t2">Mini-classifica della serata selezionata. HOT se ≥ 100.</div>
               </div>
             </div>
 
@@ -765,11 +837,14 @@
 
             <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px">
               ${nightStandings.slice(0,6).map((r,idx)=>`
-                <div class="rankRow ${podiumClass(idx)}" style="padding:10px 12px">
+                <div class="rankRow ${podiumClass(idx)}" style="padding:10px 12px" data-teamrow="1" data-teamname="${escapeAttr(r.team.name)}">
                   <div class="teamLeft" style="gap:8px">
                     <div style="width:26px; font-weight:950">#${idx+1}</div>
                     <div style="font-size:18px">${escapeHtml(r.team.icon)}</div>
-                    <div style="font-weight:900">${escapeHtml(r.team.name)}</div>
+                    <div style="font-weight:900">
+                      ${escapeHtml(r.team.name)}
+                      ${r.hot ? `<span class="hotBadge">🔥 HOT</span>` : ""}
+                    </div>
                   </div>
                   <div style="font-weight:950">${r.total}</div>
                 </div>
@@ -778,7 +853,7 @@
 
             <div class="mutebox" style="margin-top:12px">
               Modalità serata: <b>${state.nightData[nightId].mode==="manual" ? "Manuale" : "Per artista"}</b><br>
-              Tip: per bucare la cache, aggiungi <span class="mono">?v=3</span> all’URL.
+              Tip cache: aggiungi <span class="mono">?v=9</span> all’URL.
             </div>
           </div>
         </div>
@@ -846,7 +921,7 @@ Enrico Nigiotti -5"></textarea>
 
               <div style="margin-top:14px; display:flex; flex-direction:column; gap:10px">
                 ${state.teams.map(t=>`
-                  <div class="rankRow" style="flex-direction:column; align-items:stretch; gap:10px">
+                  <div class="rankRow" style="flex-direction:column; align-items:stretch; gap:10px" data-teamrow="1" data-teamname="${escapeAttr(t.name)}">
                     <div style="display:flex; justify-content:space-between; align-items:center; gap:10px">
                       <div class="teamLeft">
                         <div style="font-size:18px">${escapeHtml(t.icon)}</div>
@@ -876,17 +951,21 @@ Enrico Nigiotti -5"></textarea>
               <div class="ibox">🏆</div>
               <div>
                 <div class="t1">Classifica serata</div>
-                <div class="t2">Calcolata in base alla modalità selezionata. Podio animato ✨</div>
+                <div class="t2">HOT se una squadra fa ≥ 100 in questa serata.</div>
               </div>
             </div>
 
             <div style="display:flex; flex-direction:column; gap:10px">
               ${nightStandings.map((r,idx)=>`
-                <div class="rankRow ${podiumClass(idx)}">
+                <div class="rankRow ${podiumClass(idx)}" data-teamrow="1" data-teamname="${escapeAttr(r.team.name)}">
                   <div class="teamLeft">
                     <div class="teamIcon">${escapeHtml(r.team.icon)}</div>
                     <div>
-                      <div style="font-weight:950">#${idx+1} — ${escapeHtml(r.team.name)} ${medalBadge(idx)}</div>
+                      <div style="font-weight:950">
+                        #${idx+1} — ${escapeHtml(r.team.name)}
+                        ${medalBadge(idx)}
+                        ${r.hot ? `<span class="hotBadge">🔥 HOT</span>` : ""}
+                      </div>
                       <div class="small">${nd.mode==="manual" ? "Totale inserito a mano" : `Roster: ${(r.team.roster||[]).length} · Cap: ${escapeHtml(r.team.captain||"—")}`}</div>
                     </div>
                   </div>
@@ -896,7 +975,7 @@ Enrico Nigiotti -5"></textarea>
             </div>
 
             <div class="mutebox" style="margin-top:12px">
-              <b>Tip da festival:</b> per evitare mismatch, copia i nomi dai roster (match tollerante ma sempre meglio).
+              <b>Tip:</b> per evitare mismatch, copia i nomi dai roster. Match tollerante, ma meglio essere consistenti.
             </div>
           </div>
         </div>
@@ -911,7 +990,7 @@ Enrico Nigiotti -5"></textarea>
               <div class="ibox">👥</div>
               <div>
                 <div class="t1">Roster squadre</div>
-                <div class="t2">Già precompilate. L’esclusività è bloccante.</div>
+                <div class="t2">Precompilate. Esclusività bloccante.</div>
               </div>
             </div>
 
@@ -958,22 +1037,20 @@ Enrico Nigiotti -5"></textarea>
             <div class="title">
               <div class="ibox">📌</div>
               <div>
-                <div class="t1">Condivisione nel gruppo</div>
-                <div class="t2">Zero login: usate Export/Import.</div>
+                <div class="t1">Condivisione</div>
+                <div class="t2">Zero login: Export/Import nel gruppo.</div>
               </div>
             </div>
 
             <div class="mutebox">
               <b>Flusso perfetto:</b><br>
-              • 1 admin inserisce punti/serate<br>
+              • 1 admin inserisce punti<br>
               • fa <b>Export</b> e manda il file nel gruppo<br>
               • gli altri fanno <b>Import</b> e vedono la stessa classifica.
             </div>
 
             <div class="mutebox" style="margin-top:12px">
-              <b>Debug info (se qualcosa non va):</b><br>
-              • Se vedi bianco: aggiungi <span class="mono">?v=3</span> all’URL<br>
-              • Se ancora bianco: controlla che <span class="mono">index.html</span> sia in root.
+              <b>Easter egg:</b> triplo tap/click su <b>Ghigliottina</b> 🪓 per aprire il minigioco.
             </div>
           </div>
         </div>
@@ -1019,7 +1096,7 @@ Enrico Nigiotti -5"></textarea>
             </div>
 
             <div class="mutebox">
-              Se cambi telefono o browser, fai <b>Export</b> prima, poi <b>Import</b> sul nuovo dispositivo.
+              Se cambi telefono o browser, fai <b>Export</b> prima, poi <b>Import</b>.
             </div>
           </div>
         </div>
@@ -1027,7 +1104,7 @@ Enrico Nigiotti -5"></textarea>
     }
 
     // ==========
-    // Escaping helpers (prevent HTML break)
+    // Escaping
     // ==========
     function escapeHtml(str){
       return String(str ?? "")
@@ -1038,20 +1115,258 @@ Enrico Nigiotti -5"></textarea>
         .replaceAll("'","&#039;");
     }
     function escapeAttr(str){
-      // safe for attributes
       return escapeHtml(str).replaceAll("\n"," ");
+    }
+
+    // ==========
+    // Easter egg: triple tap on "Ghigliottina"
+    // ==========
+    let ghCount = 0;
+    let ghTimer = null;
+    function isGhigliottina(name){
+      return norm(name) === "ghigliottina";
+    }
+
+    document.addEventListener("click", (e)=>{
+      const row = e.target.closest("[data-teamrow='1']");
+      if(!row) return;
+
+      const teamName = row.getAttribute("data-teamname") || "";
+      if(!isGhigliottina(teamName)) return;
+
+      ghCount++;
+      clearTimeout(ghTimer);
+      ghTimer = setTimeout(()=> ghCount = 0, 900);
+
+      if(ghCount >= 3){
+        ghCount = 0;
+        startGhigliottinaGame();
+      }
+    });
+
+    // ==========
+    // Ghigliottina Game (Game&Watch style)
+    // ==========
+    function startGhigliottinaGame(){
+      toast("🪓 GHIGLIOTTINA MODE!");
+      const overlay = document.createElement("div");
+      overlay.className = "gameOverlay";
+
+      overlay.innerHTML = `
+        <div class="gameTopbar">
+          <div class="gameTitle">🪓 Ghigliottina — MiniGame (Game&Watch)</div>
+          <div class="gameBtns">
+            <div class="gameHud" id="gameHud">Score: 0 · Miss: 0/5</div>
+            <button class="gameBtn" id="btnExit">Esci ✖</button>
+          </div>
+        </div>
+        <canvas class="gameCanvas" id="gameCanvas"></canvas>
+        <div class="touchPad">
+          <button class="gameBtn" id="btnLeft">◀</button>
+          <button class="gameBtn" id="btnRight">▶</button>
+        </div>
+      `;
+
+      document.body.appendChild(overlay);
+
+      const canvas = overlay.querySelector("#gameCanvas");
+      const ctx = canvas.getContext("2d", { alpha: false });
+      const hud = overlay.querySelector("#gameHud");
+      const btnExit = overlay.querySelector("#btnExit");
+
+      // resize
+      function resize(){
+        const topbarH = overlay.querySelector(".gameTopbar").offsetHeight;
+        const padH = overlay.querySelector(".touchPad").offsetHeight;
+        const w = window.innerWidth;
+        const h = window.innerHeight - topbarH; // canvas uses remaining; touchpad overlaps bottom
+        canvas.width = Math.floor(w * devicePixelRatio);
+        canvas.height = Math.floor(h * devicePixelRatio);
+        canvas.style.height = h + "px";
+        canvas.style.width = w + "px";
+        ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+      }
+      resize();
+      window.addEventListener("resize", resize);
+
+      let running = true;
+
+      // player
+      let playerX = window.innerWidth / 2;
+      const playerY = () => (canvas.clientHeight - 90);
+      const playerSpeed = 9;
+
+      // cards
+      const cards = [];
+      let score = 0;
+      let miss = 0;
+      let spawnT = 0;
+
+      // controls (touch + keyboard)
+      let leftHeld = false;
+      let rightHeld = false;
+
+      function setHeld(btn, held){
+        if(btn === "L") leftHeld = held;
+        if(btn === "R") rightHeld = held;
+      }
+
+      const btnLeft = overlay.querySelector("#btnLeft");
+      const btnRight = overlay.querySelector("#btnRight");
+
+      // Touch hold
+      const holdStart = (which)=> (e)=>{ e.preventDefault(); setHeld(which, true); };
+      const holdEnd = (which)=> (e)=>{ e.preventDefault(); setHeld(which, false); };
+
+      btnLeft.addEventListener("touchstart", holdStart("L"), {passive:false});
+      btnLeft.addEventListener("touchend", holdEnd("L"), {passive:false});
+      btnLeft.addEventListener("touchcancel", holdEnd("L"), {passive:false});
+      btnRight.addEventListener("touchstart", holdStart("R"), {passive:false});
+      btnRight.addEventListener("touchend", holdEnd("R"), {passive:false});
+      btnRight.addEventListener("touchcancel", holdEnd("R"), {passive:false});
+
+      // Mouse (desktop)
+      btnLeft.addEventListener("mousedown", ()=> setHeld("L", true));
+      btnLeft.addEventListener("mouseup", ()=> setHeld("L", false));
+      btnLeft.addEventListener("mouseleave", ()=> setHeld("L", false));
+      btnRight.addEventListener("mousedown", ()=> setHeld("R", true));
+      btnRight.addEventListener("mouseup", ()=> setHeld("R", false));
+      btnRight.addEventListener("mouseleave", ()=> setHeld("R", false));
+
+      // Keyboard
+      function onKey(e){
+        if(e.key === "ArrowLeft") setHeld("L", e.type==="keydown");
+        if(e.key === "ArrowRight") setHeld("R", e.type==="keydown");
+        if(e.key === "Escape") exit();
+      }
+      window.addEventListener("keydown", onKey);
+      window.addEventListener("keyup", onKey);
+
+      // Exit
+      function exit(){
+        running = false;
+        window.removeEventListener("resize", resize);
+        window.removeEventListener("keydown", onKey);
+        window.removeEventListener("keyup", onKey);
+        overlay.remove();
+      }
+      btnExit.addEventListener("click", exit);
+
+      // tap outside topbar? (no, would be annoying) -> only Exit/Esc
+
+      function spawnCard(){
+        const x = Math.random() * (window.innerWidth - 40) + 20;
+        const speed = 3.2 + Math.random() * 2.2; // 3.2..5.4
+        cards.push({ x, y: -20, vy: speed, w: 18, h: 24 });
+      }
+
+      function drawBaldMan(x, y){
+        // head
+        ctx.fillStyle = "rgba(255,255,255,.92)";
+        ctx.beginPath();
+        ctx.arc(x, y, 18, 0, Math.PI*2);
+        ctx.fill();
+        // body
+        ctx.fillRect(x-12, y+18, 24, 26);
+        // little shine
+        ctx.fillStyle = "rgba(0,0,0,.12)";
+        ctx.beginPath();
+        ctx.arc(x-6, y-6, 6, 0, Math.PI*2);
+        ctx.fill();
+      }
+
+      function drawCard(c){
+        ctx.fillStyle = "#2f7dff";
+        ctx.fillRect(c.x - c.w/2, c.y - c.h/2, c.w, c.h);
+        ctx.fillStyle = "rgba(255,255,255,.65)";
+        ctx.fillRect(c.x - c.w/2 + 4, c.y - c.h/2 + 5, c.w-8, 4);
+      }
+
+      function loop(ts){
+        if(!running) return;
+
+        // background
+        ctx.fillStyle = "#000";
+        ctx.fillRect(0, 0, window.innerWidth, canvas.clientHeight);
+
+        // subtle stars
+        ctx.fillStyle = "rgba(255,255,255,.12)";
+        for(let i=0;i<18;i++){
+          const sx = (i*97 + (ts/20)) % window.innerWidth;
+          const sy = (i*53 + (ts/35)) % canvas.clientHeight;
+          ctx.fillRect(sx, sy, 2, 2);
+        }
+
+        // player move
+        if(leftHeld) playerX -= playerSpeed;
+        if(rightHeld) playerX += playerSpeed;
+        playerX = Math.max(20, Math.min(window.innerWidth - 20, playerX));
+
+        // spawn
+        spawnT += 1;
+        if(spawnT % 28 === 0) spawnCard(); // cadence
+
+        // update + collisions
+        const py = playerY();
+        for(let i=cards.length-1;i>=0;i--){
+          const c = cards[i];
+          c.y += c.vy;
+
+          // collision box (simple)
+          const hit =
+            Math.abs(c.x - playerX) < 22 &&
+            Math.abs(c.y - (py+16)) < 28;
+
+          if(hit){
+            score++;
+            cards.splice(i,1);
+            continue;
+          }
+
+          if(c.y > canvas.clientHeight + 40){
+            miss++;
+            cards.splice(i,1);
+            continue;
+          }
+        }
+
+        // draw cards
+        for(const c of cards) drawCard(c);
+
+        // draw player
+        drawBaldMan(playerX, py);
+
+        // HUD
+        hud.textContent = `Score: ${score} · Miss: ${miss}/5`;
+
+        // game over
+        if(miss >= 5){
+          ctx.fillStyle = "rgba(0,0,0,.55)";
+          ctx.fillRect(0, 0, window.innerWidth, canvas.clientHeight);
+          ctx.fillStyle = "rgba(255,255,255,.95)";
+          ctx.font = "900 34px ui-sans-serif, system-ui";
+          ctx.fillText("GAME OVER", window.innerWidth/2 - 105, canvas.clientHeight/2 - 6);
+          ctx.font = "800 18px ui-sans-serif, system-ui";
+          ctx.fillText("Esci con ESC o pulsante", window.innerWidth/2 - 120, canvas.clientHeight/2 + 26);
+          running = false;
+          setTimeout(exit, 1800);
+          return;
+        }
+
+        requestAnimationFrame(loop);
+      }
+
+      requestAnimationFrame(loop);
     }
 
     // ==========
     // Boot
     // ==========
     try{
-      // Enforce exclusivity at boot (just in case imported data has dups)
       const dups = findRosterDuplicates(state.teams);
       if(Object.keys(dups).length){
         dupError = formatDupError(dups);
       }
-
       renderApp();
       toast("Online ✨");
     }catch(e){
@@ -1062,7 +1377,7 @@ Enrico Nigiotti -5"></textarea>
               <div class="ibox">😵</div>
               <div>
                 <div class="t1">Errore di caricamento</div>
-                <div class="t2">C’è un errore JS. Fai refresh con <span class="mono">?v=3</span>.</div>
+                <div class="t2">Fai refresh con <span class="mono">?v=9</span> all’URL.</div>
               </div>
             </div>
             <pre class="mutebox" style="white-space:pre-wrap">${escapeHtml(String(e))}</pre>
