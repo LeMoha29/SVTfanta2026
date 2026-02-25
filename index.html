@@ -150,6 +150,21 @@
       background:#ff1a1a; color:white; animation: hotBlink 1s infinite alternate;
       box-shadow:0 0 12px rgba(255,0,0,.7); border:1px solid rgba(255,255,255,.18);
     }
+    .top5Badge{
+      margin-left:8px; font-size:11px; font-weight:950; padding:6px 10px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.22); white-space:nowrap;
+      text-transform:uppercase; letter-spacing:.03em;
+    }
+    .top5Badge.silver{
+      color:#f5f9ff;
+      background: linear-gradient(135deg, rgba(165,181,209,.72), rgba(123,140,171,.72));
+      box-shadow:0 0 12px rgba(179,199,234,.35);
+    }
+    .top5Badge.gold{
+      color:#2f2200;
+      background: linear-gradient(135deg, rgba(255,226,122,.95), rgba(255,188,62,.95));
+      box-shadow:0 0 14px rgba(255,206,84,.5);
+    }
     @keyframes hotBlink{ from{opacity:1; transform:scale(1)} to{opacity:.6; transform:scale(1.05)} }
 
     .nightBtns{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
@@ -206,8 +221,9 @@
 
     const LEAGUE_NAME = "SVT Official FantaSanremo";
 
-    const HOT_THRESHOLD = 150; // ✅ HOT ora scatta a 150
-
+    const HOT_THRESHOLD = 200; // ✅ HOT ora scatta a 200
+    const TOP5_BONUS = 20;
+    const APP_VERSION = "top5-rule-2026-02-25";
     const NIGHTS = [
       { id: "n1", label: "Serata 1" },
       { id: "n2", label: "Serata 2" },
@@ -286,7 +302,18 @@
       n4: {},
       n5: {}
     };
-
+    
+    // Top 5 ufficiale di Sanremo (non la top 5 punti Fanta)
+    // Inserisci solo gli artisti realmente entrati in top 5 nella serata.
+    const ADMIN_TOP5 = {
+      n1: [
+        // "Artista 1", "Artista 2", "Artista 3", "Artista 4", "Artista 5"
+      ],
+      n2: [],
+      n3: [],
+      n4: [],
+      n5: []
+    };
     // ============================================================
     // Logic
     // ============================================================
@@ -308,11 +335,34 @@
       const extraByTeam = ADMIN_EXTRA[nightId] || {};
       let sum = 0;
 
+      const top5Info = getTeamTop5Info(team, nightId);
       for(const a of (team.roster||[])) sum += getPoints(ptsMap, a);
-      const capPts = getPoints(ptsMap, team.captain);
-      sum += capPts; // captain x2
+      sum += top5Info.members.length * TOP5_BONUS;
+      if(top5Info.hasCaptain) sum += TOP5_BONUS; // bonus top 5 del capitano raddoppiato
       sum += clamp(extraByTeam[team.name] ?? 0);
       return Math.round(sum*10)/10;
+    }
+    function isInOfficialTop5(artist, nightId){
+      const list = ADMIN_TOP5[nightId] || [];
+      const key = norm(artist);
+      return list.some(name => norm(name) === key);
+    }
+
+    function getTeamTop5Info(team, nightId){
+      const members = (team.roster || []).filter(artist => isInOfficialTop5(artist, nightId));
+      const hasCaptain = members.some(artist => norm(artist) === norm(team.captain));
+      return { members, hasCaptain };
+    }
+
+    function renderTop5Badges(team, nightId){
+      const { members, hasCaptain } = getTeamTop5Info(team, nightId);
+      if(!members.length) return "";
+
+      let badges = "";
+      if(hasCaptain) badges += `<span class="top5Badge gold">TOP 5</span>`;
+      const silverCount = members.length - (hasCaptain ? 1 : 0);
+      for(let i=0; i<silverCount; i++) badges += `<span class="top5Badge silver">TOP 5</span>`;
+      return badges;
     }
 
     function computeNightStandings(nightId){
@@ -371,8 +421,9 @@
               <div class="kpi">
                 <div class="pill">👥 ${TEAMS.length} squadre</div>
                 <div class="pill">📅 ${NIGHTS.length} serate</div>
-                <div class="pill">👑 Cap x2</div>
+                <div class="pill">👑 Cap: raddoppia solo bonus TOP 5</div>
                 <div class="pill">🔥 HOT: ≥ ${HOT_THRESHOLD}/serata</div>
+                <div class="pill">✅ Regola TOP 5 ufficiale attiva</div>
               </div>
             </div>
           </div>
@@ -387,7 +438,7 @@
           ${tab==="serata" ? renderSerata(nightStandings) : ""}
           ${tab==="admin" ? renderAdminHelp() : ""}
 
-          <div class="footer">SVT Official FantaSanremo — admin centrale su GitHub • tip: se cache, aggiungi ?v=1 all’URL</div>
+          <div class="footer">SVT Official FantaSanremo — admin centrale su GitHub • tip: se cache usa Ctrl/Cmd+Shift+R o aggiungi <span class="mono">?v=${Date.now()}</span> • versione <span class="mono">${APP_VERSION}</span></div>
         </div>
       `;
 
@@ -422,6 +473,7 @@
                         <div style="font-weight:950">
                           #${idx+1} — ${escapeHtml(r.team.name)}
                           ${medalBadge(idx)}
+                          ${renderTop5Badges(r.team, nightId)}
                         </div>
                         <div class="small">Cap: <span class="mono" style="font-weight:900">${escapeHtml(r.team.captain||"—")}</span></div>
                       </div>
@@ -456,6 +508,7 @@
                     <div style="font-size:18px">${escapeHtml(r.team.icon)}</div>
                     <div style="font-weight:900">
                       ${escapeHtml(r.team.name)}
+                      ${renderTop5Badges(r.team, nightId)}
                       ${r.hot ? `<span class="hotBadge">🔥 HOT</span>` : ""}
                     </div>
                   </div>
@@ -498,6 +551,7 @@
                     <div style="font-weight:950">
                       #${idx+1} — ${escapeHtml(r.team.name)}
                       ${medalBadge(idx)}
+                      ${renderTop5Badges(r.team, nightId)}
                       ${r.hot ? `<span class="hotBadge">🔥 HOT</span>` : ""}
                     </div>
                     <div class="small">Cap: <span class="mono" style="font-weight:900">${escapeHtml(r.team.captain||"—")}</span></div>
@@ -523,7 +577,7 @@
               <div class="ibox">🛠️</div>
               <div>
                 <div class="t1">Come aggiorni i punteggi</div>
-                <div class="t2">Modifica solo <span class="mono">ADMIN_POINTS</span> e fai Commit.</div>
+                <div class="t2">Modifica <span class="mono">ADMIN_POINTS</span> + <span class="mono">ADMIN_TOP5</span> e fai Commit.</div>
               </div>
             </div>
 
@@ -537,7 +591,9 @@
               &nbsp;&nbsp;},<br>
               &nbsp;&nbsp;n2: {}, n3: {}, n4: {}, n5: {}<br>
               };</span><br><br>
-              <b>Capitano x2</b> è automatico. HOT scatta a <b>${HOT_THRESHOLD}</b> in una serata.
+              <b>TOP 5 ufficiale Sanremo:</b> compila <span class="mono">ADMIN_TOP5.${nightId}</span> con i 5 artisti della serata.<br>
+              Ogni artista in top 5 dà <b>+${TOP5_BONUS}</b> alla squadra; se è il Capitano il bonus top 5 vale <b>+${TOP5_BONUS*2}</b>.<br>
+              HOT scatta a <b>${HOT_THRESHOLD}</b> in una serata.
             </div>
           </div>
         </div>
