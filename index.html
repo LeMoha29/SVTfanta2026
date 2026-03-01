@@ -530,7 +530,6 @@
     function computeTeamNight(team, nightId){
       const ptsMap = ADMIN_POINTS[nightId] || {};
       const extraMap = ADMIN_EXTRA[nightId] || {};
-for (const a of (team.roster || [])) sum += getPoints(extraByArtist, a);
       let sum = 0;
 
       const top5Info = getTeamTop5Info(team, nightId);
