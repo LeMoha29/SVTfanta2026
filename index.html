@@ -529,8 +529,7 @@
 
     function computeTeamNight(team, nightId){
       const ptsMap = ADMIN_POINTS[nightId] || {};
-      const extraByTeam = ADMIN_EXTRA[nightId] || {};
-      const extraByArtist = ADMIN_EXTRA[nightId] || {};
+      const extraMap = ADMIN_EXTRA[nightId] || {};
 for (const a of (team.roster || [])) sum += getPoints(extraByArtist, a);
       let sum = 0;
 
@@ -544,7 +543,12 @@ for (const a of (team.roster || [])) sum += getPoints(extraByArtist, a);
         for(const a of (team.roster||[])) sum += getFinalRankingBonus(a);
         sum += getFinalRankingBonus(team.captain); // capitano raddoppia bonus/malus classifica finale
       }
-      
+
+      // Supporto ibrido:
+      // 1) extra per squadra -> { "Nome Squadra": 15 }
+      // 2) extra per artista -> { "Nome Artista": 5 }
+      sum += clamp(extraMap[team.name] ?? 0);
+      for(const a of (team.roster||[])) sum += getPoints(extraMap, a)
       return Math.round(sum*10)/10;
     }
     function isInOfficialTop5(artist, nightId){
