@@ -548,7 +548,7 @@ for (const a of (team.roster || [])) sum += getPoints(extraByArtist, a);
       // 1) extra per squadra -> { "Nome Squadra": 15 }
       // 2) extra per artista -> { "Nome Artista": 5 }
       sum += clamp(extraMap[team.name] ?? 0);
-      for(const a of (team.roster||[])) sum += getPoints(extraMap, a)
+      for(const a of (team.roster||[])) sum += getPoints(extraMap, a);
       return Math.round(sum*10)/10;
     }
     function isInOfficialTop5(artist, nightId){
