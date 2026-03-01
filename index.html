@@ -545,7 +545,6 @@ for (const a of (team.roster || [])) sum += getPoints(extraByArtist, a);
         sum += getFinalRankingBonus(team.captain); // capitano raddoppia bonus/malus classifica finale
       }
       
-      sum += clamp(extraByTeam[team.name] ?? 0);
       return Math.round(sum*10)/10;
     }
     function isInOfficialTop5(artist, nightId){
