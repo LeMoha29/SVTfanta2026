@@ -571,10 +571,9 @@
         sum += getFinalRankingBonus(team.captain); // capitano raddoppia bonus/malus classifica finale
       }
 
-      // Supporto ibrido:
-      // 1) extra per squadra -> { "Nome Squadra": 15 }
-      // 2) extra per artista -> { "Nome Artista": 5 }
-      sum += clamp(extraMap[team.name] ?? 0);
+      // Extra: conteggiamo SOLO per artista.
+      // Se in ADMIN_EXTRA scrivi un artista (es. "DARGEN D’AMICO": 80),
+      // il bonus/malus viene applicato una sola volta alla squadra che lo ha in rosa.
       for(const a of (team.roster||[])) sum += getPoints(extraMap, a);
       return Math.round(sum*10)/10;
     }
